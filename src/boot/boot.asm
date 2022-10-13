@@ -12,11 +12,16 @@ times $$ + 3 - $ nop
 
 loadedString:	db "Peoples Secure Computing System loaded!", 0xa, 0xd, 0x0
 initialLoading:	db "Peoples Secure Computing System loading...", 0xa, 0xd, 0x0
-loadedSector: db "4 extra floppy sectors loaded, this should be enough.", 0xa, 0xd, 0x0
+loadedSector: db "10 extra floppy sectors loaded, this should be enough.", 0xa, 0xd, 0x0
 halting: db "halting (not a good sign)", 0xa, 0xd, 0x0
-clean: db "                                                                                ", 0xa, 0xd, 0x0 ; 80 column spaces to clear screen, theres definitally a better way to do this but this works fine
+clean: db "                                                                                ", 0xa, 0xd, 0x0 
+; 80 column spaces to clear screen, theres definitally a better way to do this but this works fine
 
 load_kernel:
+
+    mov sp, 0x7BFF  ; set up stack in the "almost 30KiB" between 0x500 and 0x7BFF free before bootloader.
+                    ; stack grows downwards so this has 0 risk of overwriting bootloader.
+                    ; https://wiki.osdev.org/Memory_Map_(x86)
     push cs
     pop ds
 
@@ -24,9 +29,7 @@ load_kernel:
     int  10h
 
 
-    mov dh, 2
-    mov dl, 0
-    push bx
+    mov dx, 0
     mov si, initialLoading
     call print_string
 
@@ -42,7 +45,7 @@ load_kernel:
    cld
    ; start putting in values:
    mov ah, 2h    ; int13h function 2
-   mov al, 4    ; we want to read 4 sectors
+   mov al, 10    ; we want to read 10 sectors
    mov ch, 0     ; from cylinder number 0
    mov cl, 2     ; the sector number 2 - second sector (starts from 1, not 0)
    mov dh, 0     ; head number 0
@@ -62,8 +65,7 @@ halt:
 ;bx in stack for row/col
 ;dh for row, dl for column in bx
 print_string:
-    pop bx
-    mov dl, 0
+    ; mov dl, 0
 	pusha
 
     ; mov dh, 2
@@ -83,21 +85,15 @@ print_string_loop:
 print_string_done:
 	popa
     inc dh
-    push bx
 	ret
 
 ;dh=row
 ;dl=col
 movecursor:
-    pop bx
-    pusha
 
     mov bh, 0
     mov ah, 02h
     int 10h
-
-    popa
-    push bx
 
     ret
 

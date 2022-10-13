@@ -1,3 +1,6 @@
+
+bits 16
+
 ;
 ;   in:  nothing
 ;   out: nothing
@@ -11,8 +14,9 @@ startVGA:
 ;   in:  ax = Y coord, bx = X coord, dl = color
 ;   out: nothing
 ;
-
 putPixel:
+
+    pusha
 
     mov ax, 0a000h
     mov es, ax
@@ -24,4 +28,14 @@ putPixel:
     mov di, ax
     pop dx
     mov [es:di], dl       ; store color/pixel
+    ret
+
+    popa
+
+;
+;   in: ax = Y coord, bx = X coord, ch = char
+;   out: nothing
+;
+drawChar:
+    ; WIP
     ret
