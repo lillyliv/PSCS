@@ -19,7 +19,7 @@ clean: db "                                                                     
 
 load_kernel:
 
-    mov sp, 0x7BFF  ; set up stack in the "almost 30KiB" between 0x500 and 0x7BFF free before bootloader.
+    mov sp, 0x7000  ; set up stack in the "almost 30KiB" between 0x500 and 0x7BFF free before bootloader.
                     ; stack grows downwards so this has 0 risk of overwriting bootloader.
                     ; https://wiki.osdev.org/Memory_Map_(x86)
     push cs
