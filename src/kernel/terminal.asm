@@ -3,8 +3,10 @@ qwetry db 'QWERTYUIOP[]', 10, 0, 'ASDFGHJKL:', 39, '~', 0, '|ZXCVBNM<>/'
 charInp db 0, 0
 space db " ", 0x0
 haltcmd db "HALT", 0x0
+textcmd db "TEXT", 0x0
 termRam resb 100
-termRamPos dw 0
+termRamPos dw 0x0
+
 
 getChar:
 
@@ -106,7 +108,7 @@ done:
 
     mov si, termRam
     call print_string
-    
+
     ret
 
 runCMD:
@@ -119,9 +121,15 @@ runCMD:
     mov bp, haltcmd
 
     call compareString
-
     cmp ah, 1
     je halt
+
+    mov bx, termRam
+    mov bp, textcmd
+
+    call compareString
+    cmp ah, 1
+    je text
 
     popa
 

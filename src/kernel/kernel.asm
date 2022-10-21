@@ -99,5 +99,6 @@ compareString:
 %include "src/kernel/svga.asm"
 %include "src/kernel/terminal.asm"
 %include "src/kernel/disk.asm"
+%include "src/bia/text.asm"
 
 times 1000000 - ($ - $$)  db 0 ; 1 000 000 bytes for user disk reads and writes

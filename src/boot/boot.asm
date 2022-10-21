@@ -21,13 +21,13 @@ clean: db "                                                                     
 
 load_kernel:
 
-    cli
+    ; cli
 
-    mov ax, STACK_SEGMENT
-    mov ss, ax
-    xor sp, sp
+    ; mov ax, STACK_SEGMENT
+    ; mov ss, ax
+    ; xor sp, sp
 
-    sti
+    ; sti
     push cs
     pop ds
 
