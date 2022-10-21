@@ -3,4 +3,4 @@ Peoples Secure Computing System is a free operating system for the people, by th
 
 ## Build Dependencies
 
-PSCS only requires an up to date version of NASM to build and qemu-system-x86_64 to run. Currently the binary takes up a little less than 1KiB so disk space shouldnt be a problem.
+PSCS only requires an up to date version of NASM to build and qemu-system-x86_64 to run. Currently the binary takes up exactly 1 000 000 bytes so disk space shouldnt be a problem.
