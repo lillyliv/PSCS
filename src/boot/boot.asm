@@ -1,6 +1,6 @@
 ;
 ;   peoples secure computing system (PSCS)
-;   bootloader, some snippets from SnowDrop os
+;   bootloader, inspired by SnowDrop os
 ;   http://sebastianmihai.com/snowdrop/
 ;
 
@@ -19,9 +19,10 @@ clean: db "                                                                     
 
 load_kernel:
 
-    mov sp, 0x7000  ; set up stack in the "almost 30KiB" between 0x500 and 0x7BFF free before bootloader.
+    ; mov sp, stack_end  ; set up stack in the "almost 30KiB" between 0x500 and 0x7BFF free before bootloader.
                     ; stack grows downwards so this has 0 risk of overwriting bootloader.
                     ; https://wiki.osdev.org/Memory_Map_(x86)
+                    ; EDIT : removed because stack didnt want to work
     push cs
     pop ds
 
@@ -110,7 +111,7 @@ clearscreenloop:
 
     ret
 
-times 512 - 2 - ($ - $$)  db 0		; pad to 510 bytes
+times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
  
 dw 0AA55h		; BIOS expects this signature at the end of the boot sector
 
@@ -120,5 +121,9 @@ finalize_load_kernel:
 
     call kernel
     jmp halt
+
+; stack_begin:
+;     RESB 4096  ; Reserve 4 KiB stack space
+; stack_end:
 
 %include "src/kernel/kernel.asm"

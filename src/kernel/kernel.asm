@@ -1,204 +1,103 @@
 ;
 ;   peoples secure computing system (PSCS)
 ;   kernel, 16 bit real mode.
+;
 
 bits 16
 
-qwetry db 'QWERTYUIOP[]', 10, 0, 'ASDFGHJKL:', 39, '~', 0, '|ZXCVBNM<>/'
-charInp db 0, 0
-char db 0
-space db " ", 0x0
-haltcmd db "HALT", 0x0
-return db "RETURN", 0x0
-
-termRam db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-termRamPos dw 0, 0
-cmpRamPos dw 0, 0
+INTERRUPT_VECTOR_TABLE 		equ 0000h
+testt: db "testt", 0xa, 0xd, 0x0
 
 kernel:
     mov si, loadedString
     call print_string
 
+    mov al, 69h
+    mov bx, testint
+    call setInterrupt
+
+    int 69h
+
     mov dx, 0
     push dx
 
-    ; mov word [termRamPos], termRam
+    call disktest
 
 kernel_loop:
-    ; cmp sp, 0x600
-    ; jl halt
 
     call getChar
 
     jmp kernel_loop
+
+
+;
+;   creates a new interrupt available for user programs and kernel use
+;   in: al = int number, bx = pointer to handler
+;
+setInterrupt:
+
+    mov di, bx
+
+    xor ah, ah				; AX := interrupt number
+	shl ax, 2				; each interrupt vector is 4 bytes long
+	mov si, ax				; SI := byte offset of user-specified entry
+	
+	mov ax, INTERRUPT_VECTOR_TABLE
+	mov ds, ax				; DS := IVT segment
+	; DS:SI now points to 2-word interrupt vector
+	
+	mov word bx, [ds:si]	; BX := old handler offset
+	mov word dx, [ds:si+2]	; DX := old handler segment
+	; DX:BX now points to the old interrupt handler
+	
+	; now install new interrupt handler
+	; pushf
+	cli						; ensure we don't get interrupted in-between
+							; the two instructions below
+	mov word [ds:si], di	; offset of new interrupt handler
+	mov word [ds:si+2], es	; segment of new interrupt handler
+
+    ret
+
+
+testint:
+
+    mov si, testt
+    call print_string
 
     ret
 
 ;
 ;   in: two string pointers in bx and bp
 ;   out: 1 or 0 in ah
-;   this took an ungodly ammount of time to get working
+;   this took a stupid ammount of time to get working & optimize
 ;
 compareString:
-    mov ah, 1
-.loop:
 
-
-    mov ch, [bp]
-    mov cl, [bx]
-    cmp cl, ch
+    mov ch, [bp]      ; | nasm cant compare two locations in memory
+    cmp byte [bx], ch ; | to get around this we just move one into a register
     jne .false
 
+    cmp byte [bp], 0 ; | only need to check if one of the strings has ended because
+    je .end          ; | two lines above if both arent equal it will exit false
 
-    cmp byte [bp], 0
-    je .end
-    cmp byte [bx], 0
-    je .end
+    inc bp ; | moves the pointers forward one char
+    inc bx ; |
 
-
-    inc bp
-    inc bx
-
-    jmp .loop
+    jmp compareString
 
     ret
 
 .false:
-    mov ah, 0
+    xor ah, ah
     ret
 .end:
-    ret
-
-getChar:
-
-    xor ax, ax
-    mov ah, 0x00
-    int 0x16
-    mov al, ah
-    cmp al, 1 ; esc
-    jne .notEsc
-    call clearscreen
-
-    mov dx, 0
-    call movecursor
-
-    mov word [termRamPos], 0
-    xor cx, cx
-
-.escLoop:
-
-
-    mov [termRamPos], cx
-    mov bx, [termRamPos]
-    mov byte [termRam + bx], 0
-
-    inc cx
-    cmp cx, 99
-    jne .escLoop
-
-    mov word [termRamPos], 0
-
-    ret
-.notEsc:
-
-    cmp al, 0x1c
-    je runCMD
-    cmp al, 0x39
-    je spaceP
-    cmp al, 0x0e
-    je backspaceP
-    cmp al, 0x35 ; highest scan code
-    ja done
-    sub al, 0x10 ; lowest scan code
-    jb done
-    mov bx, qwetry
-    xlat
-    ; mov [charInp], al
-    ; mov si, charInp
-    ; call print_string
-
-    jmp done
-
-backspaceP:
-
-    cmp word [termRamPos], 0
-    je backspacePdone
-
-    dec word [termRamPos]
-    mov bx, [termRamPos]
-    mov byte [termRam + bx], 0
-
-    mov byte dl, [termRamPos]
-    mov dh, 0
-    call movecursor
-
-    mov si, space
-    call print_string
-
-    mov byte dl, [termRamPos]
-    mov dh, 0
-    call movecursor
-
-    ret
-
-backspacePdone:
-
-    ret
-
-spaceP:
-    mov si, space
-    call print_string
-
-    mov al, " "
-
-    jmp done
-
-done:
-
-
-    cmp byte [termRamPos], 99
-    je backspacePdone
-
-    mov bx, [termRamPos]
-    mov byte [termRam + bx], al
-    inc word [termRamPos]
-
-    mov dl, 0
-    mov dh, 0
-    call movecursor
-
-    mov si, termRam
-    call print_string
-
-    ; mov si, termRam
-    ; call print_string
-    ret
-
-runCMD:
-
-    pusha
-
-    xor ah, ah
-
-    ; push termRam
-    ; push haltcmd
-
-    mov bx, termRam
-    mov bp, haltcmd
-
-    call compareString
-
-    ; mov word [termRam], "ha"
-    ; cmp word [termRam], "HA"
-
-    ; pop ax
-
-    cmp ah, 1
-    je halt
-
-    popa
-
+    mov ah, 1
     ret
 
 %include "src/kernel/vga.asm"
 %include "src/kernel/svga.asm"
+%include "src/kernel/terminal.asm"
+%include "src/kernel/disk.asm"
+
+times 1000000 - ($ - $$)  db 0 ; 1 000 000 bytes for user disk reads and writes
