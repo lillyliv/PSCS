@@ -10,6 +10,8 @@ org 7C00h
 jmp load_kernel
 times $$ + 3 - $ nop
 
+STACK_SEGMENT equ 1000h ; 1000h in memory, this is below the bootloader and kernel.
+
 loadedString:	db "Peoples Secure Computing System loaded!", 0xa, 0xd, 0x0
 initialLoading:	db "Peoples Secure Computing System loading...", 0xa, 0xd, 0x0
 loadedSector: db "10 extra floppy sectors loaded, this should be enough.", 0xa, 0xd, 0x0
@@ -19,10 +21,13 @@ clean: db "                                                                     
 
 load_kernel:
 
-    ; mov sp, stack_end  ; set up stack in the "almost 30KiB" between 0x500 and 0x7BFF free before bootloader.
-                    ; stack grows downwards so this has 0 risk of overwriting bootloader.
-                    ; https://wiki.osdev.org/Memory_Map_(x86)
-                    ; EDIT : removed because stack didnt want to work
+    cli
+
+    mov ax, STACK_SEGMENT
+    mov ss, ax
+    xor sp, sp
+
+    sti
     push cs
     pop ds
 
@@ -121,9 +126,5 @@ finalize_load_kernel:
 
     call kernel
     jmp halt
-
-; stack_begin:
-;     RESB 4096  ; Reserve 4 KiB stack space
-; stack_end:
 
 %include "src/kernel/kernel.asm"
