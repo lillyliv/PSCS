@@ -4,7 +4,7 @@ charInp db 0, 0
 space db " ", 0x0
 haltcmd db "HALT", 0x0
 textcmd db "TEXT", 0x0
-termRam resb 100
+termRam times 100 db 0
 termRamPos dw 0x0
 
 
@@ -15,7 +15,7 @@ getChar:
     int 0x16
     mov al, ah
     cmp al, 1 ; esc
-    jne .notEsc
+    jne notEsc
     call clearscreen
 
     mov dx, 0
@@ -24,7 +24,7 @@ getChar:
     mov word [termRamPos], 0
     xor cx, cx
 
-.escLoop:
+escLoop:
 
 
     mov [termRamPos], cx
@@ -33,12 +33,12 @@ getChar:
 
     inc cx
     cmp cx, 99
-    jne .escLoop
+    jne escLoop
 
     mov word [termRamPos], 0
 
     ret
-.notEsc:
+notEsc:
 
     cmp al, 0x1c
     je runCMD
@@ -90,7 +90,7 @@ spaceP:
 
     mov al, " "
 
-    jmp done
+    ; jmp done
 
 done:
 
@@ -113,8 +113,6 @@ done:
 
 runCMD:
 
-    pusha
-
     xor ah, ah
     
     mov bx, termRam
@@ -131,6 +129,16 @@ runCMD:
     cmp ah, 1
     je text
 
-    popa
+    call clearscreen
+    jmp donecmd
+donecmd:
 
+    mov bx, [termRamPos]
+    mov byte [termRam + bx], 0
+    mov word [termRamPos], 0
+
+    ; call clearscreen
+
+    xor cx, cx
+    call escLoop
     ret

@@ -20,14 +20,6 @@ clean: db "                                                                     
 ; 80 column spaces to clear screen, theres definitally a better way to do this but this works fine
 
 load_kernel:
-
-    ; cli
-
-    ; mov ax, STACK_SEGMENT
-    ; mov ss, ax
-    ; xor sp, sp
-
-    ; sti
     push cs
     pop ds
 

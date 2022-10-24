@@ -9,7 +9,7 @@ disktest:
     mov ah, 2h    ; int13h function 3
     mov al, 1     ; we want to write 1 sectors
     mov ch, 0     ; from cylinder number 0
-    mov cl, 3     ; the sector number 2 - second sector (starts from 1, not 0)
+    mov cl, 6     ; the sector number 2 - second sector (starts from 1, not 0)
     mov dh, 0     ; head number 0
     xor bx, bx    
     mov es, bx    ; es should be 0
@@ -35,7 +35,7 @@ disktest:
     mov ah, 3h    ; int13h function 3
     mov al, 1     ; we want to write 1 sectors
     mov ch, 0     ; from cylinder number 0
-    mov cl, 3     ; the sector number 2 - second sector (starts from 1, not 0)
+    mov cl, 6     ; the sector number 2 - second sector (starts from 1, not 0)
     mov dh, 0     ; head number 0
     xor bx, bx    
     mov es, bx    ; es should be 0
