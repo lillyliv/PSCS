@@ -78,6 +78,10 @@ backspaceP:
     mov dh, 0
     call movecursor
 
+    mov bx, [termRamPos]
+
+    mov byte [sector + bx], 0
+
     ret
 
 backspacePdone:
@@ -100,6 +104,9 @@ done:
 
     mov bx, [termRamPos]
     mov byte [termRam + bx], al
+
+    mov byte [sector + bx], al
+
     inc word [termRamPos]
 
     mov dl, 0
@@ -112,6 +119,12 @@ done:
     ret
 
 runCMD:
+
+    mov ch, 0     ; from cylinder number 0
+    mov cl, 2    ; the sector number (starts from 1, not 0)
+    mov dh, 0     ; head number 0
+    mov dl, 1
+    call writeSector
 
     xor ah, ah
     
