@@ -80,7 +80,7 @@ backspaceP:
 
     mov bx, [termRamPos]
 
-    mov byte [sector + bx], 0
+    ; mov byte [sector + bx], 0
 
     ret
 
@@ -105,7 +105,7 @@ done:
     mov bx, [termRamPos]
     mov byte [termRam + bx], al
 
-    mov byte [sector + bx], al
+    ; mov byte [sector + bx], al
 
     inc word [termRamPos]
 
@@ -120,11 +120,11 @@ done:
 
 runCMD:
 
-    mov ch, 0     ; from cylinder number 0
-    mov cl, 2    ; the sector number (starts from 1, not 0)
-    mov dh, 0     ; head number 0
-    mov dl, 1
-    call writeSector
+    ; mov ch, 0     ; from cylinder number 0
+    ; mov cl, 2    ; the sector number (starts from 1, not 0)
+    ; mov dh, 0     ; head number 0
+    ; mov dl, 1
+    ; call writeSector
 
     xor ah, ah
     

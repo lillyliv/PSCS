@@ -27,7 +27,7 @@ load_kernel:
     cli
 
     mov ss, ax
-    mov sp, 0x7000
+    mov sp, 0x4000
 
     sti
 

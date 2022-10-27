@@ -3,6 +3,9 @@ sector: times 512 db 0
 teststr: db "hellolmfaoo", 0xa, 0xd, 0x0
 
 writeSector:
+
+    ; pusha
+    ; pop bx
     xor ax, ax    ; make sure ds is set to 0
     mov ds, ax
     cld
@@ -17,10 +20,12 @@ writeSector:
     mov bx, sector ; 512bytes from origin address 7c00h
     ; mov dl, 1
     int 13h 
+    ; popa
     ret
 
 
 readSector:
+    ; pop bx
     xor ax, ax    ; make sure ds is set to 0
     mov ds, ax
     cld
@@ -35,6 +40,8 @@ readSector:
     mov bx, sector ; 512bytes from origin address 7c00h
     ; mov dl, 1
     int 13h
+    ; popa
+    ret
 
 disktest:
     xor ax, ax    ; make sure ds is set to 0

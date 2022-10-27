@@ -36,17 +36,36 @@ kernel:
     mov bx, readSector
     call setInterrupt
 
+    mov al, 76h
+    mov bx, readFile
+    call setInterrupt
+
+    mov al, 77h
+    mov bx, writeFile
+    call setInterrupt
+
+    mov al, 78h
+    mov bx, getAlStore
+    call setInterrupt
+
 
 kernel_loop:
 
     call getChar
 
     jmp kernel_loop
+;
+; in:  bx = source pointer, bp = destination pointer
+; out: ax = return code (1 success, 0 fail)
+;
+memcpy:
+    ret
 
 %include "src/kernel/vga.asm"
 %include "src/kernel/svga.asm"
 %include "src/kernel/terminal.asm"
 %include "src/kernel/disk.asm"
+%include "src/kernel/fs.asm"
 %include "src/bia/text.asm"
 
 times 1474560 - ($ - $$)  db 0 ; pad to the exact ammount of bytes on a "1.44 mb" floppy disk (double 720k)
