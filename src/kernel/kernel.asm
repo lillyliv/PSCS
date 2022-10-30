@@ -48,6 +48,10 @@ kernel:
     mov bx, getAlStore
     call setInterrupt
 
+    mov al, 79h
+    mov bx, getSectorPointer
+    call setInterrupt
+
 
 kernel_loop:
 

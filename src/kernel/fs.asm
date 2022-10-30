@@ -1,6 +1,6 @@
 ;
-;   The PSCS Filesystem is inspired by USTAR
-;   https://wiki.osdev.org/USTAR
+;   The PSCS Filesystem is inspired by USTAR and FAT12
+;   https://wiki.osdev.org/USTAR   https://wiki.osdev.org/FAT#FAT_12
 ;   This filesystem is meant to be modified in place however
 ;
 
@@ -13,7 +13,7 @@
 ; 6-100 filename 
 ; 101 filesize (measured in 512 byte sectors)
 ; 102-152 owner (username can only be 50 bytes)
-; 153-512 reserved
+; 153-511 reserved
 ;
 ;
 ;
@@ -25,8 +25,20 @@ getAlStore:
     mov bp, alstore
     ret
 
+; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive
+
+getFilesize:
+    call readSector
+    mov bp, [sector + 101]
+    ret
+
+getSectorPointer:
+    mov bp, sector
+    ret
+
 ;
-; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive, al=block
+; reads a 512 byte block from a file to sector pointer
+; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive, al=block number
 ; out: ax=escape code (1 success, 0 fail)
 ;
 readFile:
@@ -62,42 +74,15 @@ readFile:
     ret
 
 ;
-;   push index, pointer to data ( ends with 0, escape byte is 5C (backslash) )
+; writes a 512 byte block to a file from the sector pointer
+; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive, al=block number
+; out: ax=escape code (1 success, 0 fail)
 ;
 writeFile:
-
+    call writeSector
     ret
 
 
 
-
-
-; ;
-; ;   push index, drive
-; ;   pop cylinder, head, sector, location
-; ;
-; getFileFromTable:
-;     mov ch, 0 ; first track (starts from 0)
-;     mov cl, 2 ; second sector (starts from 1)
-;     mov dh, 0 ; first head of two (starts from 0)
-;     pop ax    ; drive number
-;     mov dl, ah
-
-;     call readSector
-
-;     pop ax
-;     mov cx, 3
-;     mul cx
-;     mov bx, ax
-
-;     push word [sector+bx] ;location
-;     push word [sector+bx+1] ;sector
-;     push word [sector+bx+2] ;head
-;     push word [sector+bx+3] ;track
-
-;     push 0
-;     push 0
-;     push 3
-;     push 0
-
-;     ret
+getFileFromTable:
+    ret

@@ -150,7 +150,7 @@ donecmd:
     mov byte [termRam + bx], 0
     mov word [termRamPos], 0
 
-    ; call clearscreen
+    call clearscreen
 
     xor cx, cx
     call escLoop
