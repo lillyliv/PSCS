@@ -7,9 +7,17 @@ bits 16
 
 INTERRUPT_VECTOR_TABLE equ 0000h
 testt: db "testt", 0xa, 0xd, 0x0
+buf: resb 10
 
 kernel:
     mov si, loadedString
+    call print_string
+
+    mov ax, 9
+    mov bx, testt
+    mov bp, buf
+    call memcpy
+    mov si, buf
     call print_string
 
     mov al, 70h
@@ -59,10 +67,30 @@ kernel_loop:
 
     jmp kernel_loop
 ;
-; in:  bx = source pointer, bp = destination pointer
-; out: ax = return code (1 success, 0 fail)
+; in:  bx = source pointer, bp = destination pointer, ax = length in bytes
 ;
+
+currentPos: dw 0
+length: dw 0
+
 memcpy:
+    mov word [length], ax
+.loop:
+
+    mov byte al, [bx]
+    mov byte [bp], al
+
+    mov word ax, [length]
+    cmp word [currentPos], ax
+    je .end
+
+    inc word bx
+    inc word bp
+    inc word [currentPos]
+
+    jmp .loop
+
+.end:
     ret
 
 %include "src/kernel/vga.asm"

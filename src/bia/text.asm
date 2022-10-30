@@ -5,6 +5,7 @@
 bits 16
 fail: db "failed", 0
 exiting: db "exiting Text editor", 0xa, 0xd, 0
+filename: db "enter Filename: ", 0
 char: resb 2
 pos: dw 0
 
@@ -52,3 +53,13 @@ end:
     mov si, exiting
     int 73h
     int 70h
+
+saveFile:
+
+
+
+    ret
+
+readFileToBuffer:
+
+    ret
