@@ -26,10 +26,28 @@ load_kernel:
     xor ax, ax
     cli
 
-    mov ss, ax
-    mov sp, 0x4000
+    mov ds, ax             ; DS=0
+    mov ss, ax             ; stack starts at seg 0
+    mov sp, 0x4000         ; 2000h past code start, 
 
-    sti
+   push ds                ; save real mode
+ 
+   lgdt [gdtinfo]         ; load gdt register
+ 
+   mov  eax, cr0          ; switch to pmode by
+   or al,1                ; set pmode bit
+   mov  cr0, eax
+ 
+   jmp $+2                ; tell 386/486 to not crash
+ 
+   mov  bx, 0x08          ; select descriptor 1
+   mov  ds, bx            ; 8h = 1000b
+ 
+   and al,0xFE            ; back to realmode
+   mov  cr0, eax          ; by toggling bit again
+ 
+   pop ds                 ; get back old segment
+   sti
 
     mov  ax, 3    ; BIOS video mode 80x25 16-color text
     int  10h
@@ -69,7 +87,7 @@ halt:
 
 ;si = pointer to string (null terminated)
 ;bx in stack for row/col
-;dh for row, dl for column in bx
+;dh for row, dl for column
 print_string:
     ; mov dl, 0
 	pusha
@@ -115,32 +133,6 @@ clearscreenloop:
     jne clearscreenloop
 
     ret
-
-setInterrupt:
-
-    mov di, bx
-
-    xor ah, ah				; AX := interrupt number
-	shl ax, 2				; each interrupt vector is 4 bytes long
-	mov si, ax				; SI := byte offset of user-specified entry
-	
-	mov ax, INTERRUPT_VECTOR_TABLE
-	mov ds, ax				; DS := IVT segment
-	; DS:SI now points to 2-word interrupt vector
-	
-	mov word bx, [ds:si]	; BX := old handler offset
-	mov word dx, [ds:si+2]	; DX := old handler segment
-	; DX:BX now points to the old interrupt handler
-	
-	; now install new interrupt handler
-	; pushf
-	cli						; ensure we don't get interrupted in-between
-							; the two instructions below
-	mov word [ds:si], di	; offset of new interrupt handler
-	mov word [ds:si+2], es	; segment of new interrupt handler
-
-    ret
-
 returnInt:
     call donecmd
     jmp kernel_loop
@@ -177,9 +169,9 @@ compareString:
     mov ah, 1
     ret
 
-;ax = time to delay in 125 ms increments
+;ax = time to delay in roughlys 125 ms increments
 ;https://stackoverflow.com/questions/1858640/how-can-i-create-a-sleep-function-in-16bit-masm-assembly-x86/1862232#1862232
-;converted for nasm
+;converted for nasm by me
 DELAY_TIMER:
     STI                             ; ensure interrupts are on
     PUSH    CX                      ; call-preserve CX and DS (if needed)
@@ -190,10 +182,10 @@ DELAY_TIMER:
     MUL     CX                      ; AH (ticks) = delay_time * delay_factor
     XOR     CX, CX                  ; CX = 0
     MOV     CL, AH                  ; CX = # of ticks to wait
-    MOV     AH, BYTE DS:[6CH]   ; get starting tick counter
+    MOV     AH, BYTE DS:[6CH]       ; get starting tick counter
 TICK_DELAY:
     HLT                             ; wait for any interrupt
-    MOV     AL, BYTE DS:[6CH]   ; get current tick counter
+    MOV     AL, BYTE DS:[6CH]       ; get current tick counter
     CMP     AL, AH                  ; still the same?
     JZ      TICK_DELAY              ; loop if the same
     MOV     AH, AL                  ; otherwise, save new tick value to AH
@@ -202,8 +194,16 @@ TICK_DELAY:
     POP     CX
     RET
 
-times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
+gdtinfo:
+   dw gdt_end - gdt - 1   ;last byte in table
+   dd gdt                 ;start of table
  
+gdt         dd 0,0        ; entry 0 is always unused
+flatdesc    db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
+gdt_end:
+ 
+
+times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
 dw 0AA55h		; BIOS expects this signature at the end of the boot sector
 
 finalize_load_kernel:

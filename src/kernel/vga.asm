@@ -21,12 +21,12 @@ putPixel:
     mov ax, 0a000h
     mov es, ax
 
-    push dx               ; oops, mul changes dx too
+    mov bp, dx               ; oops, mul changes dx too
     mov cx, 320
     mul cx                ; multiply Y (ax) by 320 (one row)
     add ax, bx            ; and add X (bx) (result= dx:ax)
     mov di, ax
-    pop dx
+    mov dx, bp
     mov [es:di], dl       ; store color/pixel
     ret
 
