@@ -30,23 +30,6 @@ load_kernel:
     mov ss, ax             ; stack starts at seg 0
     mov sp, 0x4000         ; 2000h past code start, 
 
-   push ds                ; save real mode
- 
-   lgdt [gdtinfo]         ; load gdt register
- 
-   mov  eax, cr0          ; switch to pmode by
-   or al,1                ; set pmode bit
-   mov  cr0, eax
- 
-   jmp $+2                ; tell 386/486 to not crash
- 
-   mov  bx, 0x08          ; select descriptor 1
-   mov  ds, bx            ; 8h = 1000b
- 
-   and al,0xFE            ; back to realmode
-   mov  cr0, eax          ; by toggling bit again
- 
-   pop ds                 ; get back old segment
    sti
 
     mov  ax, 3    ; BIOS video mode 80x25 16-color text
