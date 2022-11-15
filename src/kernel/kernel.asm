@@ -15,8 +15,6 @@ kernel:
 
     call print_string
 
-
-
     mov ax, 9
     mov bx, testt
     mov bp, buf
@@ -88,34 +86,6 @@ kernel:
     mov bx, print_hex
     call setInterrupt
 
-    mov al, 80h
-    mov bx, unreal_bank_in
-    call setInterrupt
-
-    mov al, 81h
-    mov bx, unreal_bank_out
-    call setInterrupt
-
-
-    ; unreal banking example copying halting string into and back out of unreal mode and printing it
-    ; note this probably overwrites some important things such
-    ; as stack because were copying a 28 byte string into a 512 byte area, dont do this!
-    
-    ; mov ebp, halting
-    ; mov edx, 0x01000050
-
-    ; call unreal_bank_in
-
-    ; mov edx, 0x01000050
-    ; mov ebp, 0x1000
-
-    ; call unreal_bank_out
-
-    ; mov si, 0x1000
-
-    ; call print_string
-
-
 kernel_loop:
 
     call getChar
@@ -123,6 +93,7 @@ kernel_loop:
     jmp kernel_loop
 
 ; Prints the value of DX as hex.
+; 16 bits only!
 print_hex:
   mov cx,4          ; Start the counter: we want to print 4 characters
                     ; 4 bits per char, so we're printing a total of 16 bits

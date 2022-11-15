@@ -6,18 +6,60 @@
 ;   I put a bunch of functions in here because
 ;   this will not be overwritten and is fixed size
 
-bits 16
 org 7C00h
 
 jmp load_kernel
-times $$ + 3 - $ nop
 
 loadedString:	db "Peoples Secure Computing System loaded!", 0xa, 0xd, 0x0
 initialLoading:	db "Peoples Secure Computing System loading...", 0xa, 0xd, 0x0
-loadedSector: db "10 extra floppy sectors loaded, this should be enough.", 0xa, 0xd, 0x0
+loadedSector: db "20 extra floppy sectors loaded, this should be enough.", 0xa, 0xd, 0x0
 halting: db "halting (not a good sign)", 0xa, 0xd, 0x0
-clean: db "                                                                                ", 0xa, 0xd, 0x0 
-; 80 column spaces to clear screen, theres definitally a better way to do this but this works fine
+unrealEnabled: db "Unreal mode enabled, you now have access to your entire 4gb of ram!", 0xa, 0xd, 0x0
+unreal_mode_enabled: db 1
+enable_A20:
+        cli
+ 
+        call    a20wait
+        mov     al,0xAD
+        out     0x64,al
+ 
+        call    a20wait
+        mov     al,0xD0
+        out     0x64,al
+ 
+        call    a20wait2
+        in      al,0x60
+        push    eax
+ 
+        call    a20wait
+        mov     al,0xD1
+        out     0x64,al
+ 
+        call    a20wait
+        pop     eax
+        or      al,2
+        out     0x60,al
+ 
+        call    a20wait
+        mov     al,0xAE
+        out     0x64,al
+ 
+        call    a20wait
+        sti
+        ret
+ 
+a20wait:
+        in      al,0x64
+        test    al,2
+        jnz     a20wait
+        ret
+ 
+ 
+a20wait2:
+        in      al,0x64
+        test    al,1
+        jz      a20wait2
+        ret
 
 load_kernel:
     ; push cs
@@ -30,13 +72,43 @@ load_kernel:
     mov ss, ax             ; stack starts at seg 0
     mov sp, 0x4000         ; 2000h past code start, 
 
-   sti
+    sti
 
     mov  ax, 3    ; BIOS video mode 80x25 16-color text
     int  10h
 
+    cmp byte [unreal_mode_enabled], 1
+    jne .nounreal
 
-    mov dx, 0
+
+   cli                    ; no interrupts
+   push ds                ; save real mode
+ 
+   lgdt [gdtinfo]         ; load gdt register
+ 
+   mov  eax, cr0          ; switch to pmode by
+   or al,1                ; set pmode bit
+   mov  cr0, eax
+ 
+   jmp $+2                ; tell 386/486 to not crash
+ 
+   mov  bx, 0x08          ; select descriptor 1
+   mov  ds, bx            ; 8h = 1000b
+    
+    and al,0xFE            ; back to realmode
+    mov  cr0, eax          ; by toggling bit again
+    
+    pop ds                 ; get back old segment
+
+    call enable_A20
+
+    sti
+    mov bx, 0
+    mov si, unrealEnabled
+    call print_string
+
+.nounreal:
+    mov bx, 0
     mov si, initialLoading
     call print_string
 
@@ -52,7 +124,7 @@ load_kernel:
    cld
    ; start putting in values:
    mov ah, 2h    ; int13h function 2
-   mov al, 10    ; we want to read 10 sectors
+   mov al, 20    ; we want to read 10 sectors
    mov ch, 0     ; from cylinder number 0
    mov cl, 2     ; the sector number 2 - second sector (starts from 1, not 0)
    mov dh, 0     ; head number 0
@@ -93,32 +165,25 @@ print_string_done:
 	popa
     inc dh
 	ret
+gdtinfo:
+   dw gdt_end - gdt - 1   ;last byte in table
+   dd gdt                 ;start of table
+ 
+gdt         dd 0,0        ; entry 0 is always unused
+flatdesc    db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
+gdt_end:
+ 
 
-;dh=row
-;dl=col
-movecursor:
+times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
+dw 0AA55h		; BIOS expects this signature at the end of the boot sector
 
-    mov bh, 0
-    mov ah, 02h
-    int 10h
-
-    ret
-
-clearscreen:
-    mov dh, 0
-    
-clearscreenloop:
-
-    mov si, clean
+finalize_load_kernel:
+    mov si, loadedSector
     call print_string
 
-    cmp dh, 25
-    jne clearscreenloop
+    call kernel
+    jmp halt
 
-    ret
-returnInt:
-    call donecmd
-    jmp kernel_loop
 
 ;
 ;   creates a new interrupt available for user programs and kernel use
@@ -152,6 +217,32 @@ compareString:
     mov ah, 1
     ret
 
+;dh=row
+;dl=col
+movecursor:
+
+    mov bh, 0
+    mov ah, 02h
+    int 10h
+
+    ret
+
+clearscreen:
+    mov dh, 0
+    
+clearscreenloop:
+
+    mov si, clean
+    call print_string
+
+    cmp dh, 25
+    jne clearscreenloop
+
+    ret
+returnInt:
+    call donecmd
+    jmp kernel_loop
+
 ;ax = time to delay in roughlys 125 ms increments
 ;https://stackoverflow.com/questions/1858640/how-can-i-create-a-sleep-function-in-16bit-masm-assembly-x86/1862232#1862232
 ;converted for nasm by me
@@ -177,23 +268,7 @@ TICK_DELAY:
     POP     CX
     RET
 
-gdtinfo:
-   dw gdt_end - gdt - 1   ;last byte in table
-   dd gdt                 ;start of table
- 
-gdt         dd 0,0        ; entry 0 is always unused
-flatdesc    db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
-gdt_end:
- 
-
-times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
-dw 0AA55h		; BIOS expects this signature at the end of the boot sector
-
-finalize_load_kernel:
-    mov si, loadedSector
-    call print_string
-
-    call kernel
-    jmp halt
+clean: db "                                                                                ", 0xa, 0xd, 0x0 
+; 80 column spaces to clear screen, theres definitally a better way to do this but this works fine
 
 %include "src/kernel/kernel.asm"

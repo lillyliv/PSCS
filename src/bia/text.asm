@@ -2,6 +2,7 @@
 ; Peoples Secure Computing System built-in text editor
 ; 2022 Lilly
 ;
+; god what have i done
 bits 16
 
 text:
@@ -55,14 +56,7 @@ loop:
     call putCharAt
     jmp .back
 end:
-    ; call saveFile
-    ; mov si, exiting
-    ; int 73h
-    ; int 70h
-
     jmp saveFile
-
-    ret
 
 saveFile:
 
@@ -77,8 +71,6 @@ saveFile:
     mov dl, 1
     int 77h
     int 70h
-
-    ret
 
 readFileToBuffer:
 
