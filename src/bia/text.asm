@@ -23,7 +23,7 @@ loop:
 
     cmp byte ah, 0eh
     je .backspace
-    
+
     mov dl, [screenposx]
     mov dh, [screenposy]
     call setpos

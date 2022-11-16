@@ -4,6 +4,7 @@ charInp db 0, 0
 space db " ", 0x0
 haltcmd db "HALT", 0x0
 textcmd db "TEXT", 0x0
+rebootcmd db "REBOOT", 0x0
 termRam times 100 db 0
 termRamPos dw 0x0
 
@@ -120,12 +121,6 @@ done:
 
 runCMD:
 
-    ; mov ch, 0     ; from cylinder number 0
-    ; mov cl, 2    ; the sector number (starts from 1, not 0)
-    ; mov dh, 0     ; head number 0
-    ; mov dl, 1
-    ; call writeSector
-
     xor ah, ah
     
     mov bx, termRam
@@ -142,6 +137,13 @@ runCMD:
     cmp ah, 1
     je text
 
+    mov bx, termRam
+    mov bp, rebootcmd
+
+    call compareString
+    cmp ah, 1
+    je reboot
+
     call clearscreen
     jmp donecmd
 donecmd:
@@ -150,7 +152,9 @@ donecmd:
     mov byte [termRam + bx], 0
     mov word [termRamPos], 0
 
-    call clearscreen
+    mov  ax, 3    ; BIOS video mode 80x25 16-color text
+    int  10h
+
 
     xor cx, cx
     call escLoop

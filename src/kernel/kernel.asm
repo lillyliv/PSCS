@@ -196,6 +196,10 @@ TICK_DELAY:
     POP     DS
     POP     CX
     RET
+
+reboot:
+    ; https://wiki.osdev.org/Reboot#Far_jump_to_the_reset_vector.2FTriple_fault
+    jmp 0xFFFF:0
 %include "src/kernel/memory.asm"
 %include "src/kernel/vga.asm"
 %include "src/kernel/svga.asm"
