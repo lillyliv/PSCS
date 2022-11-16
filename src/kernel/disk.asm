@@ -2,6 +2,7 @@
 sector: times 512 db 0
 
 writeSector:
+    pusha
     xor ax, ax    ; make sure ds is set to 0
     mov ds, ax
     cld
@@ -16,6 +17,7 @@ writeSector:
     mov bx, sector ; 512bytes from origin address 7c00h
     ; mov dl, 1    ; drive number
     int 13h 
+    popa
     ret
 
 

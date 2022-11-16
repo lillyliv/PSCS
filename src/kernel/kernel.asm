@@ -7,20 +7,27 @@ bits 16
 
 INTERRUPT_VECTOR_TABLE equ 0000h
 testt: db "testt", 0xa, 0xd, 0x0
-buf: resb 10
-endptr: resb 10
 kernel:
 
     mov si, loadedString
 
     call print_string
 
-    mov ax, 9
-    mov bx, testt
-    mov bp, buf
-    call memcpy
-    mov si, buf
-    call print_string
+
+    ; memcpy tests
+    ;
+    ; mov ax, 9
+    ; mov bx, testt
+    ; mov bp, buf
+    ; call memcpy
+    ; mov si, buf
+    ; call print_string
+
+    ;
+    ;   interrupts for user programs to use
+    ;   kernel has no use for these because the functions can be included directly
+    ;
+
 
     mov al, 70h
     mov bx, returnInt
@@ -89,11 +96,6 @@ kernel:
     mov al, 80h
     mov bx, mallocHimem
     call setInterrupt
-
-    call mallocHimem
-    mov byte [esi], "p"
-    mov byte [esi+1], 0
-    call print_string
 
 kernel_loop:
 

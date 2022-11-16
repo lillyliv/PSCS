@@ -2,35 +2,34 @@
 ; in:  bx = source pointer, bp = destination pointer, ax = length in bytes
 ;
 
-currentPos: dw 0
-length: dw 0
+currentPos: dd 0
+length: dd 0
 
 memcpy:
-    mov word [length], ax
-.loop:
+    mov si, bx
+    mov di, bp
+    mov cx, ax
+    rep movsb
 
-    mov byte al, [ds:bx]
-    mov byte [ds:bp], al
-
-    mov word ax, [length]
-    cmp word [currentPos], ax
-    je .end
-
-    inc word bx
-    inc word bp
-    inc word [currentPos]
-
-    jmp .loop
-
-.end:
     ret
 
+; memcpy:
+;         mov     rax, rdi
+;         mov     rcx, rdx
+;         shr     rcx, 3
+;         and     edx, 7
+;         rep ; movsq
+;         movq rdx,%rcx
+;         rep ; movsb
+
+;         ret
 
 ;
 ; mallocate in high mem
 ; in: ebx = ammount of 512 byte chunks to allocate (not working yet, only allocates one chunk at a time)
 ; out: esi = pointer to start of allocated memory
 ;
+; mallocLowmem probably will not be coming anytime soon because low memory is basically the wild west currently
 mallocHimem:
     xor edi, edi
     xor esi, esi

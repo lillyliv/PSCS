@@ -73,12 +73,25 @@ saveFile:
     call prepFileMetaData
 
     int 79h
-    mov bx, textBuffer
+    mov bx, textfilemetadata
+    mov ax, 512
     int 7ah
 
     int 78h
     mov ch, 0
     mov cl, 2
+    mov dh, 0
+    mov dl, 1
+    int 77h
+
+    int 79h
+    mov bx, textBuffer
+    mov ax, 512
+    int 7ah
+
+    int 78h
+    mov ch, 0
+    mov cl, 3
     mov dh, 0
     mov dl, 1
     int 77h
@@ -115,6 +128,5 @@ char: resb 2
 pos: dw 0
 screenposx: db 0
 screenposy: db 0
-textBuffer: resb 2000 ; 80x25 chars
+textBuffer: resb 2048 ; 80x25 chars plus 48 extra bytes to make it nice and neat (aligned by 512 byte)
 textfilemetadata: resb 512
-textBufferEnd: db 0
