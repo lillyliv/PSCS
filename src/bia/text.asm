@@ -3,21 +3,27 @@
 ; 2022 Lilly
 ;
 ; god what have i done
+
 bits 16
 text:
     int 71h ; clearscreen interrupt
     jmp loop
 
 loop:
+    mov ax, 0100h
+    int 16h
+    jz loop
+
+.keypressed:
     xor ax, ax
-    int 0x16
+    int 16h
 
     cmp byte al, 1bh
     je end
 
     cmp byte ah, 0eh
     je .backspace
-
+    
     mov dl, [screenposx]
     mov dh, [screenposy]
     call setpos
