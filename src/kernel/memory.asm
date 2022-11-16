@@ -1,28 +1,10 @@
 ;
-; in:  bx = source pointer, bp = destination pointer, ax = length in bytes
+; in:  si = source pointer, di = destination pointer, cx = length in bytes
 ;
-
-currentPos: dd 0
-length: dd 0
-
 memcpy:
-    mov si, bx
-    mov di, bp
-    mov cx, ax
     rep movsb
 
     ret
-
-; memcpy:
-;         mov     rax, rdi
-;         mov     rcx, rdx
-;         shr     rcx, 3
-;         and     edx, 7
-;         rep ; movsq
-;         movq rdx,%rcx
-;         rep ; movsb
-
-;         ret
 
 ;
 ; mallocate in high mem

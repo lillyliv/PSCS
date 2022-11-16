@@ -73,9 +73,10 @@ saveFile:
     call prepFileMetaData
 
     int 79h
-    mov bx, textfilemetadata
-    mov ax, 512
-    int 7ah
+    mov si, textfilemetadata
+    mov di, bp
+    mov cx, 512
+    rep movsb
 
     int 78h
     mov ch, 0
@@ -84,17 +85,22 @@ saveFile:
     mov dl, 1
     int 77h
 
-    int 79h
+    xor ax, ax    ; make sure ds is set to 0
+    mov ds, ax
+    cld
+    ; start putting in values:
+    mov ah, 3h     ; int13h function 3
+    mov al, 4      ; we want to write 1 sectors
+    mov ch, 0    ; from cylinder number 0
+    mov cl, 3    ; the sector number (starts from 1, not 0)
+    mov dh, 0    ; head number 0
+    xor bx, bx    
+    mov es, bx     ; es should be 0
     mov bx, textBuffer
-    mov ax, 512
-    int 7ah
+    mov dl, 1    ; drive number
+    int 13h 
 
-    int 78h
-    mov ch, 0
-    mov cl, 3
-    mov dh, 0
-    mov dl, 1
-    int 77h
+.end:
     int 70h
 
 readFileToBuffer:

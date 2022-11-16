@@ -22,6 +22,7 @@ writeSector:
 
 
 readSector:
+    pusha
     xor ax, ax    ; make sure ds is set to 0
     mov ds, ax
     cld
@@ -36,4 +37,5 @@ readSector:
     mov bx, sector  ; 512bytes from origin address 7c00h
     ; mov dl, 1
     int 13h
+    popa
     ret
