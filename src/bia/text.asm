@@ -4,7 +4,6 @@
 ;
 ; god what have i done
 bits 16
-
 text:
     int 71h ; clearscreen interrupt
     jmp loop
@@ -44,9 +43,9 @@ loop:
     mov byte [screenposx], 79
     jmp .back
 .backspace:
+    dec word [pos]
     mov bp, [pos]
     mov byte [textBuffer+bp], 0
-    dec word [pos]
     cmp byte [screenposx], 0 
     je .endrowup
     dec byte [screenposx]
@@ -54,11 +53,24 @@ loop:
     mov dl, [screenposx]
     mov dh, [screenposy]
     call putCharAt
-    jmp .back
+    jmp loop
+
+
+prepFileMetaData:
+    mov word [textfilemetadata],     "df" ; data floppy magic word
+    mov byte [textfilemetadata+2],    0   ; cyl start of file is located at
+    mov byte [textfilemetadata+3],    3   ; sect start of file is located at
+    mov byte [textfilemetadata+4],    0   ; head start of file is located at
+    mov word [textfilemetadata+5],   "hi" ; filename
+    mov byte [textfilemetadata+100],  1   ; size in 512 byte sectors
+    mov word [textfilemetadata+101], "me" ; file owner
+    ret
 end:
     jmp saveFile
 
 saveFile:
+
+    call prepFileMetaData
 
     int 79h
     mov bx, textBuffer
@@ -96,8 +108,6 @@ putCharAt:
 
     ret
 
-
-    
 fail: db "failed", 0
 exiting: db "exiting Text editor", 0xa, 0xd, 0
 filename: db "enter Filename: ", 0
@@ -106,4 +116,5 @@ pos: dw 0
 screenposx: db 0
 screenposy: db 0
 textBuffer: resb 2000 ; 80x25 chars
+textfilemetadata: resb 512
 textBufferEnd: db 0

@@ -2,10 +2,6 @@
 ;   peoples secure computing system (PSCS)
 ;   bootloader, inspired by SnowDrop os
 ;   http://sebastianmihai.com/snowdrop/
-;
-;   I put a bunch of functions in here because
-;   this will not be overwritten and is fixed size
-
 org 7C00h
 
 jmp load_kernel
@@ -173,18 +169,6 @@ gdt         dd 0,0        ; entry 0 is always unused
 flatdesc    db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
 gdt_end:
  
-
-times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
-dw 0AA55h		; BIOS expects this signature at the end of the boot sector
-
-finalize_load_kernel:
-    mov si, loadedSector
-    call print_string
-
-    call kernel
-    jmp halt
-
-
 ;
 ;   creates a new interrupt available for user programs and kernel use
 ;   in: al = int number, bx = pointer to handler
@@ -228,47 +212,21 @@ movecursor:
     ret
 
 clearscreen:
-    mov dh, 0
-    
-clearscreenloop:
-
-    mov si, clean
-    call print_string
-
-    cmp dh, 25
-    jne clearscreenloop
-
+    mov ax, 3
+    int 10h
     ret
 returnInt:
     call donecmd
     jmp kernel_loop
 
-;ax = time to delay in roughlys 125 ms increments
-;https://stackoverflow.com/questions/1858640/how-can-i-create-a-sleep-function-in-16bit-masm-assembly-x86/1862232#1862232
-;converted for nasm by me
-DELAY_TIMER:
-    STI                             ; ensure interrupts are on
-    PUSH    CX                      ; call-preserve CX and DS (if needed)
-    PUSH    DS
-    MOV     CX, 40H                 ; set DS to BIOS Data Area
-    MOV     DS, CX
-    MOV     CX, 583                 ; delay_factor = 1/8 * 18.2 * 256
-    MUL     CX                      ; AH (ticks) = delay_time * delay_factor
-    XOR     CX, CX                  ; CX = 0
-    MOV     CL, AH                  ; CX = # of ticks to wait
-    MOV     AH, BYTE DS:[6CH]       ; get starting tick counter
-TICK_DELAY:
-    HLT                             ; wait for any interrupt
-    MOV     AL, BYTE DS:[6CH]       ; get current tick counter
-    CMP     AL, AH                  ; still the same?
-    JZ      TICK_DELAY              ; loop if the same
-    MOV     AH, AL                  ; otherwise, save new tick value to AH
-    LOOP    TICK_DELAY              ; loop until # of ticks (CX) has elapsed
-    POP     DS
-    POP     CX
-    RET
+times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
+dw 0AA55h		; BIOS expects this signature at the end of the boot sector
 
-clean: db "                                                                                ", 0xa, 0xd, 0x0 
-; 80 column spaces to clear screen, theres definitally a better way to do this but this works fine
+finalize_load_kernel:
+    mov si, loadedSector
+    call print_string
+
+    call kernel
+    jmp halt
 
 %include "src/kernel/kernel.asm"

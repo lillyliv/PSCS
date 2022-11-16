@@ -86,6 +86,15 @@ kernel:
     mov bx, print_hex
     call setInterrupt
 
+    mov al, 80h
+    mov bx, mallocHimem
+    call setInterrupt
+
+    call mallocHimem
+    mov byte [esi], "p"
+    mov byte [esi+1], 0
+    call print_string
+
 kernel_loop:
 
     call getChar
@@ -160,6 +169,31 @@ setInterrupt:
 	mov word [ds:si+2], es	; segment of new interrupt handler
 
     ret
+
+;ax = time to delay in roughlys 125 ms increments
+;https://stackoverflow.com/questions/1858640/how-can-i-create-a-sleep-function-in-16bit-masm-assembly-x86/1862232#1862232
+;converted for nasm by me
+DELAY_TIMER:
+    STI                             ; ensure interrupts are on
+    PUSH    CX                      ; call-preserve CX and DS (if needed)
+    PUSH    DS
+    MOV     CX, 40H                 ; set DS to BIOS Data Area
+    MOV     DS, CX
+    MOV     CX, 583                 ; delay_factor = 1/8 * 18.2 * 256
+    MUL     CX                      ; AH (ticks) = delay_time * delay_factor
+    XOR     CX, CX                  ; CX = 0
+    MOV     CL, AH                  ; CX = # of ticks to wait
+    MOV     AH, BYTE DS:[6CH]       ; get starting tick counter
+TICK_DELAY:
+    HLT                             ; wait for any interrupt
+    MOV     AL, BYTE DS:[6CH]       ; get current tick counter
+    CMP     AL, AH                  ; still the same?
+    JZ      TICK_DELAY              ; loop if the same
+    MOV     AH, AL                  ; otherwise, save new tick value to AH
+    LOOP    TICK_DELAY              ; loop until # of ticks (CX) has elapsed
+    POP     DS
+    POP     CX
+    RET
 %include "src/kernel/memory.asm"
 %include "src/kernel/vga.asm"
 %include "src/kernel/svga.asm"

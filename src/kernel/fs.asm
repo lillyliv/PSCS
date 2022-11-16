@@ -4,21 +4,16 @@
 ;   This filesystem is meant to be modified in place however
 ;
 
-
-
+; filemetadata structure
 ; 0-2 sector magic word ("df" ascii)
-; 3 cylinder
-; 4 sector
-; 5 head
+; 3 data cylinder
+; 4 data sector
+; 5 data head
 ; 6-100 filename 
 ; 101 filesize (measured in 512 byte sectors)
 ; 102-152 owner (username can only be 50 bytes)
 ; 153-511 reserved
-;
-;
-;
 
-filemetadata: resb 512
 alstore: resb 1
 
 getAlStore:
