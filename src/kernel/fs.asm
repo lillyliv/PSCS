@@ -37,13 +37,7 @@ getSectorPointer:
 ; out: ax=escape code (1 success, 0 fail)
 ;
 readFile:
-
-    ; mov [alstore], al
-
     call readSector
-
-    ; mov si, sector
-    ; call print_string
 
     cmp word [sector], "df"
     je .fail
@@ -51,11 +45,7 @@ readFile:
     mov bp, [alstore]
     add [sector + 3], bp
     mov cl, [sector + 3]
-    ; add al, cl
-    ; inc cl
-    ; mov dh, [sector + 4]
     mov ch, 0
-    ; mov cl, 3
     mov dh, 0
     mov dl, 1
 
