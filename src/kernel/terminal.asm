@@ -7,8 +7,30 @@ textcmd db "TEXT", 0x0
 rebootcmd db "REBOOT", 0x0
 termRam times 100 db 0
 termRamPos dw 0x0
+termChar db "$ ", 0
+commandsListPointers resw 50
+commandsListStringPointers resw 50
 
+setupInitalCommands:
+    pusha
 
+    mov bp, text
+    mov [commandsListPointers+0], bp
+    mov bp, textcmd
+    mov [commandsListStringPointers+0], bp
+
+    mov bp, reboot
+    mov [commandsListPointers+2], bp
+    mov bp, rebootcmd
+    mov [commandsListStringPointers+2], bp
+
+    mov bp, halt
+    mov [commandsListPointers+4], bp
+    mov bp, haltcmd
+    mov [commandsListStringPointers+4], bp
+
+    popa
+    ret
 getChar:
 
     xor ax, ax
@@ -114,35 +136,51 @@ done:
     mov dh, 0
     call movecursor
 
+    mov si, termChar
+    call print_string
+
     mov si, termRam
     call print_string
 
     ret
 
 runCMD:
+    xor si, si
+.loop:
 
-    xor ah, ah
+    mov cx, commandsListPointers
+    mov dx, commandsListStringPointers
+
+    add cx, si
+    add cx, si
+    add dx, si
+    add dx, si
+
+    cmp si, 50
+    je .done
+
+    mov bp, termRam
+    mov bx, dx
+    mov ax, [bx]
+    mov bx, ax
+    push dx
+    push cx
+    push si
+    call compareString
+    pop si
+    pop cx
+    pop dx
     
-    mov bx, termRam
-    mov bp, haltcmd
-
-    call compareString
     cmp ah, 1
-    je halt
+    je .execute
 
-    mov bx, termRam
-    mov bp, textcmd
+    inc si
 
-    call compareString
-    cmp ah, 1
-    je text
-
-    mov bx, termRam
-    mov bp, rebootcmd
-
-    call compareString
-    cmp ah, 1
-    je reboot
+    jmp .loop
+.execute:
+    mov bx, cx
+    call [bx]
+.done:
 
     call clearscreen
     jmp donecmd
@@ -153,9 +191,15 @@ donecmd:
     mov word [termRamPos], 0
 
     mov  ax, 3    ; BIOS video mode 80x25 16-color text
-    int  10h
-
+    int  10h      ; this also happens to clear the screen.
 
     xor cx, cx
     call escLoop
+
+    xor dx, dx
+    call movecursor
+
+    mov si, termChar
+    call print_string
+
     ret

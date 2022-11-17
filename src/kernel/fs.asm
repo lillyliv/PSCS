@@ -67,7 +67,5 @@ writeFile:
     call writeSector
     ret
 
-
-
-getFileFromTable:
+retriveFileByName:
     ret
