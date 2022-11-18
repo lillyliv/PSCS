@@ -5,12 +5,38 @@ space db " ", 0x0
 haltcmd db "HALT", 0x0
 textcmd db "TEXT", 0x0
 rebootcmd db "REBOOT", 0x0
+
+commie db "                                        ", 0xa, 0xd
+db "                       *@@@/             ", 0xa, 0xd
+db "                          ,@@@@          ", 0xa, 0xd
+db "          @@@@@@@@@          @@@@@       ", 0xa, 0xd
+db "       /@@@@@@@@@             *@@@@.     ", 0xa, 0xd
+db "     @@@@@@@@@@@@               @@@@*    ", 0xa, 0xd
+db "    @@@@@@@@&@@@@@@@            @@@@@    ", 0xa, 0xd
+db "       @@@.    /@@@@@@&         *@@@@(   ", 0xa, 0xd
+db "                  (@@@@@@&      @@@@@#   ", 0xa, 0xd
+db "                     %@@@@@@#  @@@@@@    ", 0xa, 0xd
+db "           @&           &@@@@@@@@@@@/    ", 0xa, 0xd
+db "      @@#@@@@@@&          @@@@@@@@@      ", 0xa, 0xd
+db "      @@@@@  @@@@@@@@@@@@@@@@@@@@@@@@.   ", 0xa, 0xd
+db "   @@@@@*       ,@@@@@@@@@@@@.   /@@@@@@,", 0xa, 0xd
+db " /@@@@@                             (@@@@", 0
+
 termRam times 100 db 0
 termRamPos dw 0x0
 termChar db "$ ", 0
 commandsListPointers resw 50
 commandsListStringPointers resw 50
+commiecmd db "COMMIE", 0
 
+commieDraw:
+    xor dx, dx
+    call movecursor
+    mov si, commie
+    call print_string
+    xor ax, ax
+    int 16h
+    ret
 setupInitalCommands:
     pusha
 
@@ -29,12 +55,16 @@ setupInitalCommands:
     mov bp, haltcmd
     mov [commandsListStringPointers+4], bp
 
+    mov bp, commieDraw
+    mov [commandsListPointers+6], bp
+    mov bp, commiecmd
+    mov [commandsListStringPointers+6], bp
+
     popa
     ret
 getChar:
 
     xor ax, ax
-    mov ah, 0x00
     int 0x16
     mov al, ah
     cmp al, 1 ; esc
@@ -120,8 +150,6 @@ spaceP:
     ; jmp done
 
 done:
-
-
     cmp byte [termRamPos], 99
     je backspacePdone
 

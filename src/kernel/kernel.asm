@@ -13,16 +13,6 @@ kernel:
 
     call print_string
 
-
-    ; memcpy tests
-    ;
-    ; mov ax, 9
-    ; mov bx, testt
-    ; mov bp, buf
-    ; call memcpy
-    ; mov si, buf
-    ; call print_string
-
     ;
     ;   interrupts for user programs to use
     ;   kernel has no use for these because the functions can be included directly
@@ -103,6 +93,8 @@ kernel:
     
     mov si, termChar
     call print_string
+
+    ; call machineEdit
 kernel_loop:
 
     call getChar
@@ -232,6 +224,7 @@ reboot:
     ; https://wiki.osdev.org/Reboot#Far_jump_to_the_reset_vector.2FTriple_fault
     jmp 0xFFFF:0
 %include "src/kernel/memory.asm"
+%include "src/bia/machine.asm"
 %include "src/kernel/ata.asm"
 %include "src/kernel/vga.asm"
 %include "src/kernel/svga.asm"

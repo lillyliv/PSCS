@@ -66,7 +66,7 @@ load_kernel:
 
     mov ds, ax             ; DS=0
     mov ss, ax             ; stack starts at seg 0
-    mov sp, 0x4000         ; 2000h past code start, 
+    mov sp, 0x4000         ; stack at 0x4000
 
     sti
 
