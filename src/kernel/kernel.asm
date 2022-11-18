@@ -94,7 +94,7 @@ kernel:
     mov si, termChar
     call print_string
 
-    ; call machineEdit
+    call machineEdit
 kernel_loop:
 
     call getChar

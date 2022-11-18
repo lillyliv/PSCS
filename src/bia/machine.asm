@@ -16,7 +16,8 @@ initcodeEnd:
     jmp $
 editLocation: dw 0
 runMachineCode:
-
+    ; mov si, halting
+    ; call print_string
     jmp initcode
 
 ; ax = char input (x2)
@@ -63,50 +64,39 @@ machineEdit:
     ; mov ax, "hd"
     ; call charsToNibbles
     ; mov [initcode+4], bl
-    mov dx, initcode
-    call print_hex
+    ; mov dx, initcode
+    ; call print_hex
     ; jmp initcode
-    
+    xor bp, bp
 .loop:
-
     xor ax, ax
-    int 0x16
+    int 16h
 
-    cmp ah, 0x1c
-    je .enter
-    cmp ah, 0x39
-    je .byteFinished
+    cmp al, 0x20
+    je .doneByte
+    cmp al, 0x1b
+    je runMachineCode
 
-    mov bp, [byteStringPos]
-    mov [byteStringPos+bp], al
+    mov [currentByte+bp], al
 
-    cmp byte [byteStringPos], 1
-    je .resetByteStringPos
+    cmp bp, 1
+    je .decBP
 
-    inc byte [byteStringPos]
+    inc bp
 
     jmp .loop
-
-.enter:
-    call clearscreen
-
-    jmp initcode
-.resetByteStringPos:
-
-    mov byte [byteStringPos], 0
+.decBP:
+    mov bp, 0
     jmp .loop
 
-.byteFinished:
-
-    mov ax, [currentByteString]
+.doneByte:
+    mov ax, [currentByte]
     call charsToNibbles
 
-    mov bp, [editLocation]
-    mov byte [initcode+bp], bl
-
+    mov bx, [editLocation]
+    mov byte [initcode+bx], al
     inc word [editLocation]
-
-    jmp .resetByteStringPos
-currentByteString: db 2
-db 0
-byteStringPos: db 1
+    mov word [currentByte], 0
+    mov bp, 0
+    jmp .loop
+currentByte: resb 3
