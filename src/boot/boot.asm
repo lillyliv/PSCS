@@ -5,7 +5,6 @@
 org 7C00h
 
 jmp load_kernel
-
 loadedString:	db "Peoples Secure Computing System loaded!", 0xa, 0xd, 0x0
 initialLoading:	db "Peoples Secure Computing System loading...", 0xa, 0xd, 0x0
 loadedSector: db "20 extra floppy sectors loaded, this should be enough.", 0xa, 0xd, 0x0
@@ -77,6 +76,8 @@ load_kernel:
     jne .nounreal
 
 
+    call enable_A20
+
    cli                    ; no interrupts
    push ds                ; save real mode
  
@@ -95,8 +96,6 @@ load_kernel:
     mov  cr0, eax          ; by toggling bit again
     
     pop ds                 ; get back old segment
-
-    call enable_A20
 
     sti
     mov bx, 0
@@ -129,6 +128,7 @@ load_kernel:
    mov bx, 7e00h ; 512bytes from origin address 7c00h
    int 13h
    jmp 7e00h     ; jump to the next sector
+
 
 halt:
     mov si, halting

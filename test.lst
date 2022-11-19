@@ -240,8 +240,8 @@
    216 000001F3 CD10                        int 10h
    217 000001F5 C3                          ret
    218                                  returnInt:
-   219 000001F6 E87B0D                      call donecmd
-   220 000001F9 E9B400                      jmp kernel_loop
+   219 000001F6 E8640D                      call donecmd
+   220 000001F9 E9B100                      jmp kernel_loop
    221                                  
    222 000001FC 00<rep 2h>              times 512 - 2 - ($ - $$)  db 0		; pad to 512 bytes minus one word for boot magic
    223 000001FE 55AA                    dw 0AA55h		; BIOS expects this signature at the end of the boot sector
@@ -277,969 +277,938 @@
    253                              <1> 
    254 00000219 B070                <1>     mov al, 70h
    255 0000021B BB[F601]            <1>     mov bx, returnInt
-   256 0000021E E8EF00              <1>     call setInterrupt
+   256 0000021E E8EC00              <1>     call setInterrupt
    257                              <1> 
    258 00000221 B071                <1>     mov al, 71h
    259 00000223 BB[F001]            <1>     mov bx, clearscreen
-   260 00000226 E8E700              <1>     call setInterrupt
+   260 00000226 E8E400              <1>     call setInterrupt
    261                              <1> 
    262 00000229 B072                <1>     mov al, 72h
-   263 0000022B BB[2E03]            <1>     mov bx, DELAY_TIMER
-   264 0000022E E8DF00              <1>     call setInterrupt
+   263 0000022B BB[2B03]            <1>     mov bx, DELAY_TIMER
+   264 0000022E E8DC00              <1>     call setInterrupt
    265                              <1> 
    266 00000231 B073                <1>     mov al, 73h
    267 00000233 BB[A201]            <1>     mov bx, print_string
-   268 00000236 E8D700              <1>     call setInterrupt
+   268 00000236 E8D400              <1>     call setInterrupt
    269                              <1> 
    270 00000239 B074                <1>     mov al, 74h
-   271 0000023B BB[9911]            <1>     mov bx, writeSector
-   272 0000023E E8CF00              <1>     call setInterrupt
+   271 0000023B BB[8211]            <1>     mov bx, writeSector
+   272 0000023E E8CC00              <1>     call setInterrupt
    273                              <1> 
    274 00000241 B075                <1>     mov al, 75h
-   275 00000243 BB[AA11]            <1>     mov bx, readSector
-   276 00000246 E8C700              <1>     call setInterrupt
+   275 00000243 BB[9311]            <1>     mov bx, readSector
+   276 00000246 E8C400              <1>     call setInterrupt
    277                              <1> 
    278 00000249 B076                <1>     mov al, 76h
-   279 0000024B BB[CC11]            <1>     mov bx, readFile
-   280 0000024E E8BF00              <1>     call setInterrupt
+   279 0000024B BB[B511]            <1>     mov bx, readFile
+   280 0000024E E8BC00              <1>     call setInterrupt
    281                              <1> 
    282 00000251 B077                <1>     mov al, 77h
-   283 00000253 BB[F311]            <1>     mov bx, writeFile
-   284 00000256 E8B700              <1>     call setInterrupt
+   283 00000253 BB[DC11]            <1>     mov bx, writeFile
+   284 00000256 E8B400              <1>     call setInterrupt
    285                              <1> 
    286 00000259 B078                <1>     mov al, 78h
-   287 0000025B BB[BC11]            <1>     mov bx, getAlStore
-   288 0000025E E8AF00              <1>     call setInterrupt
+   287 0000025B BB[A511]            <1>     mov bx, getAlStore
+   288 0000025E E8AC00              <1>     call setInterrupt
    289                              <1> 
    290 00000261 B079                <1>     mov al, 79h
-   291 00000263 BB[C811]            <1>     mov bx, getSectorPointer
-   292 00000266 E8A700              <1>     call setInterrupt
+   291 00000263 BB[B111]            <1>     mov bx, getSectorPointer
+   292 00000266 E8A400              <1>     call setInterrupt
    293                              <1> 
    294 00000269 B07A                <1>     mov al, 7ah
-   295 0000026B BB[5903]            <1>     mov bx, memcpy
-   296 0000026E E89F00              <1>     call setInterrupt
+   295 0000026B BB[5603]            <1>     mov bx, memcpy
+   296 0000026E E89C00              <1>     call setInterrupt
    297                              <1> 
    298 00000271 B07B                <1>     mov al, 7bh
    299 00000273 BB[E901]            <1>     mov bx, movecursor
-   300 00000276 E89700              <1>     call setInterrupt
+   300 00000276 E89400              <1>     call setInterrupt
    301                              <1> 
    302 00000279 B07C                <1>     mov al, 7ch
-   303 0000027B BB[C011]            <1>     mov bx, getFilesize
-   304 0000027E E88F00              <1>     call setInterrupt
+   303 0000027B BB[A911]            <1>     mov bx, getFilesize
+   304 0000027E E88C00              <1>     call setInterrupt
    305                              <1> 
    306 00000281 B07D                <1>     mov al, 7dh
-   307 00000283 BB[2C0A]            <1>     mov bx, startVGA
-   308 00000286 E88700              <1>     call setInterrupt
+   307 00000283 BB[FF09]            <1>     mov bx, startVGA
+   308 00000286 E88400              <1>     call setInterrupt
    309                              <1> 
    310 00000289 B07E                <1>     mov al, 7eh
-   311 0000028B BB[320A]            <1>     mov bx, putPixel
-   312 0000028E E87F00              <1>     call setInterrupt
+   311 0000028B BB[050A]            <1>     mov bx, putPixel
+   312 0000028E E87C00              <1>     call setInterrupt
    313                              <1> 
    314 00000291 B07F                <1>     mov al, 7fh
-   315 00000293 BB[DB02]            <1>     mov bx, print_hex
-   316 00000296 E87700              <1>     call setInterrupt
+   315 00000293 BB[D802]            <1>     mov bx, print_hex
+   316 00000296 E87400              <1>     call setInterrupt
    317                              <1> 
    318 00000299 B080                <1>     mov al, 80h
-   319 0000029B BB[5C03]            <1>     mov bx, mallocHimem
-   320 0000029E E86F00              <1>     call setInterrupt
+   319 0000029B BB[5903]            <1>     mov bx, mallocHimem
+   320 0000029E E86C00              <1>     call setInterrupt
    321                              <1> 
    322 000002A1 E84CFF              <1>     call clearscreen
    323                              <1> 
-   324 000002A4 E8AA0B              <1>     call setupInitalCommands
+   324 000002A4 E8850B              <1>     call setupInitalCommands
    325                              <1>     
-   326 000002A7 BE[6F0D]            <1>     mov si, termChar
+   326 000002A7 BE[4A0D]            <1>     mov si, termChar
    327 000002AA E8F5FE              <1>     call print_string
-   328                              <1> 
-   329 000002AD E80207              <1>     call machineEdit
-   330                              <1> kernel_loop:
+   328                              <1> kernel_loop:
+   329                              <1> 
+   330 000002AD E8C50B              <1>     call getChar
    331                              <1> 
-   332 000002B0 E8D90B              <1>     call getChar
+   332 000002B0 EBFB                <1>     jmp kernel_loop
    333                              <1> 
-   334 000002B3 EBFB                <1>     jmp kernel_loop
-   335                              <1> 
-   336                              <1> 
-   337                              <1> nosound: ; Silences the speaker.
-   338 000002B5 E461                <1>     in al,0x61
-   339 000002B7 24FC                <1>     and al,0xFC;
-   340 000002B9 E661                <1>     out 0x61,al
-   341 000002BB C3                  <1>     ret
-   342                              <1> 
-   343                              <1> sound: ; AX = frequency Starts the speaker emiting a sound of a given frequency
-   344 000002BC 89C3                <1>     mov bx,ax ; RETURNS:  AX,BX,DX = undefined
-   345 000002BE BA1200              <1>     mov dx,0x12;
-   346 000002C1 B8DC34              <1>     mov ax,0x34DC
-   347 000002C4 F7F3                <1>     div bx
-   348 000002C6 88C3                <1>     mov bl,al
-   349 000002C8 B0B6                <1>     mov al,0xB6;
-   350 000002CA E643                <1>     out 0x43,al
-   351 000002CC 88D8                <1>     mov al,bl
-   352 000002CE E642                <1>     out 0x42,al
-   353 000002D0 88E0                <1>     mov al,ah
-   354 000002D2 E642                <1>     out 0x42,al
-   355 000002D4 E461                <1>     in al,0x61
-   356 000002D6 0C03                <1>     or al,3
-   357 000002D8 E661                <1>     out 0x61,al
-   358 000002DA C3                  <1>     ret
-   359                              <1> 
-   360                              <1> 
-   361                              <1> ; Prints the value of DX as hex.
-   362                              <1> ; 16 bits only!
-   363                              <1> print_hex:
-   364 000002DB B90400              <1>   mov cx,4          ; Start the counter: we want to print 4 characters
-   365                              <1>                     ; 4 bits per char, so we're printing a total of 16 bits
-   366                              <1> 
-   367                              <1> char_loop:
-   368 000002DE 49                  <1>   dec cx            ; Decrement the counter
-   369                              <1> 
-   370 000002DF 89D0                <1>   mov ax,dx         ; copy bx into ax so we can mask it for the last chars
-   371 000002E1 C1EA04              <1>   shr dx,4          ; shift bx 4 bits to the right
-   372 000002E4 83E00F              <1>   and ax,0xf        ; mask ah to get the last 4 bits
-   373                              <1> 
-   374 000002E7 BB[0903]            <1>   mov bx, HEX_OUT   ; set bx to the memory address of our string
-   375 000002EA 83C302              <1>   add bx, 2         ; skip the '0x'
-   376 000002ED 01CB                <1>   add bx, cx        ; add the current counter to the address
-   377                              <1> 
-   378 000002EF 83F80A              <1>   cmp ax,0xa        ; Check to see if it's a letter or number
-   379 000002F2 7C05                <1>   jl set_letter     ; If it's a number, go straight to setting the value
-   380 000002F4 800707              <1>   add byte [bx],7   ; If it's a letter, add 7
-   381                              <1>                     ; Why this magic number? ASCII letters start 17
-   382                              <1>                     ; characters after decimal numbers. We need to cover that
-   383                              <1>                     ; distance. If our value is a 'letter' it's already
-   384                              <1>                     ; over 10, so we need to add 7 more.
-   385 000002F7 7C00                <1>   jl set_letter
-   386                              <1> 
-   387                              <1> set_letter:
-   388 000002F9 0007                <1>   add byte [bx],al  ; Add the value of the byte to the char at bx
-   389                              <1> 
-   390 000002FB 83F900              <1>   cmp cx,0          ; check the counter, compare with 0
-   391 000002FE 7402                <1>   je print_hex_done ; if the counter is 0, finish
-   392 00000300 EBDC                <1>   jmp char_loop     ; otherwise, loop again
-   393                              <1> 
-   394                              <1> print_hex_done:
-   395 00000302 BE[0903]            <1>   mov si, HEX_OUT   ; print the string pointed to by bx
-   396 00000305 E89AFE              <1>   call print_string
+   334                              <1> 
+   335                              <1> nosound: ; Silences the speaker. (broken?)
+   336 000002B2 E461                <1>     in al,0x61
+   337 000002B4 24FC                <1>     and al,0xFC;
+   338 000002B6 E661                <1>     out 0x61,al
+   339 000002B8 C3                  <1>     ret
+   340                              <1> 
+   341                              <1> sound: ; AX = frequency Starts the speaker emiting a sound of a given frequency
+   342 000002B9 89C3                <1>     mov bx,ax ; RETURNS:  AX,BX,DX = undefined
+   343 000002BB BA1200              <1>     mov dx,0x12;
+   344 000002BE B8DC34              <1>     mov ax,0x34DC
+   345 000002C1 F7F3                <1>     div bx
+   346 000002C3 88C3                <1>     mov bl,al
+   347 000002C5 B0B6                <1>     mov al,0xB6;
+   348 000002C7 E643                <1>     out 0x43,al
+   349 000002C9 88D8                <1>     mov al,bl
+   350 000002CB E642                <1>     out 0x42,al
+   351 000002CD 88E0                <1>     mov al,ah
+   352 000002CF E642                <1>     out 0x42,al
+   353 000002D1 E461                <1>     in al,0x61
+   354 000002D3 0C03                <1>     or al,3
+   355 000002D5 E661                <1>     out 0x61,al
+   356 000002D7 C3                  <1>     ret
+   357                              <1> 
+   358                              <1> 
+   359                              <1> ; Prints the value of DX as hex.
+   360                              <1> ; 16 bits only!
+   361                              <1> print_hex:
+   362 000002D8 B90400              <1>   mov cx,4          ; Start the counter: we want to print 4 characters
+   363                              <1>                     ; 4 bits per char, so we're printing a total of 16 bits
+   364                              <1> 
+   365                              <1> char_loop:
+   366 000002DB 49                  <1>   dec cx            ; Decrement the counter
+   367                              <1> 
+   368 000002DC 89D0                <1>   mov ax,dx         ; copy bx into ax so we can mask it for the last chars
+   369 000002DE C1EA04              <1>   shr dx,4          ; shift bx 4 bits to the right
+   370 000002E1 83E00F              <1>   and ax,0xf        ; mask ah to get the last 4 bits
+   371                              <1> 
+   372 000002E4 BB[0603]            <1>   mov bx, HEX_OUT   ; set bx to the memory address of our string
+   373 000002E7 83C302              <1>   add bx, 2         ; skip the '0x'
+   374 000002EA 01CB                <1>   add bx, cx        ; add the current counter to the address
+   375                              <1> 
+   376 000002EC 83F80A              <1>   cmp ax,0xa        ; Check to see if it's a letter or number
+   377 000002EF 7C05                <1>   jl set_letter     ; If it's a number, go straight to setting the value
+   378 000002F1 800707              <1>   add byte [bx],7   ; If it's a letter, add 7
+   379                              <1>                     ; Why this magic number? ASCII letters start 17
+   380                              <1>                     ; characters after decimal numbers. We need to cover that
+   381                              <1>                     ; distance. If our value is a 'letter' it's already
+   382                              <1>                     ; over 10, so we need to add 7 more.
+   383 000002F4 7C00                <1>   jl set_letter
+   384                              <1> 
+   385                              <1> set_letter:
+   386 000002F6 0007                <1>   add byte [bx],al  ; Add the value of the byte to the char at bx
+   387                              <1> 
+   388 000002F8 83F900              <1>   cmp cx,0          ; check the counter, compare with 0
+   389 000002FB 7402                <1>   je print_hex_done ; if the counter is 0, finish
+   390 000002FD EBDC                <1>   jmp char_loop     ; otherwise, loop again
+   391                              <1> 
+   392                              <1> print_hex_done:
+   393 000002FF BE[0603]            <1>   mov si, HEX_OUT   ; print the string pointed to by bx
+   394 00000302 E89DFE              <1>   call print_string
+   395                              <1> 
+   396 00000305 C3                  <1>   ret               ; return the function
    397                              <1> 
-   398 00000308 C3                  <1>   ret               ; return the function
-   399                              <1> 
-   400                              <1> ; global variables
-   401 00000309 30783030303000      <1> HEX_OUT: db '0x0000',0
-   402                              <1> ; ax=interrupt number
-   403                              <1> ; bx=pointer to function
-   404                              <1> ;
-   405                              <1> setInterrupt:
+   398                              <1> ; global variables
+   399 00000306 30783030303000      <1> HEX_OUT: db '0x0000',0
+   400                              <1> ; ax=interrupt number
+   401                              <1> ; bx=pointer to function
+   402                              <1> ;
+   403                              <1> setInterrupt:
+   404                              <1> 
+   405 0000030D 89DF                <1>     mov di, bx
    406                              <1> 
-   407 00000310 89DF                <1>     mov di, bx
-   408                              <1> 
-   409 00000312 30E4                <1>     xor ah, ah				; AX := interrupt number
-   410 00000314 C1E002              <1> 	shl ax, 2				; each interrupt vector is 4 bytes long
-   411 00000317 89C6                <1> 	mov si, ax				; SI := byte offset of user-specified entry
-   412                              <1> 	
-   413 00000319 B80000              <1> 	mov ax, INTERRUPT_VECTOR_TABLE
-   414 0000031C 8ED8                <1> 	mov ds, ax				; DS := IVT segment
-   415                              <1> 	; DS:SI now points to 2-word interrupt vector
-   416                              <1> 	
-   417 0000031E 3E8B1C              <1> 	mov word bx, [ds:si]	; BX := old handler offset
-   418 00000321 3E8B5402            <1> 	mov word dx, [ds:si+2]	; DX := old handler segment
-   419                              <1> 	; DX:BX now points to the old interrupt handler
-   420                              <1> 	
-   421                              <1> 	; now install new interrupt handler
-   422                              <1> 	; pushf
-   423 00000325 FA                  <1> 	cli						; ensure we don't get interrupted in-between
-   424                              <1> 							; the two instructions below
-   425 00000326 3E893C              <1> 	mov word [ds:si], di	; offset of new interrupt handler
-   426 00000329 3E8C4402            <1> 	mov word [ds:si+2], es	; segment of new interrupt handler
+   407 0000030F 30E4                <1>     xor ah, ah				; AX := interrupt number
+   408 00000311 C1E002              <1> 	shl ax, 2				; each interrupt vector is 4 bytes long
+   409 00000314 89C6                <1> 	mov si, ax				; SI := byte offset of user-specified entry
+   410                              <1> 	
+   411 00000316 B80000              <1> 	mov ax, INTERRUPT_VECTOR_TABLE
+   412 00000319 8ED8                <1> 	mov ds, ax				; DS := IVT segment
+   413                              <1> 	; DS:SI now points to 2-word interrupt vector
+   414                              <1> 	
+   415 0000031B 3E8B1C              <1> 	mov word bx, [ds:si]	; BX := old handler offset
+   416 0000031E 3E8B5402            <1> 	mov word dx, [ds:si+2]	; DX := old handler segment
+   417                              <1> 	; DX:BX now points to the old interrupt handler
+   418                              <1> 	
+   419                              <1> 	; now install new interrupt handler
+   420                              <1> 	; pushf
+   421 00000322 FA                  <1> 	cli						; ensure we don't get interrupted in-between
+   422                              <1> 							; the two instructions below
+   423 00000323 3E893C              <1> 	mov word [ds:si], di	; offset of new interrupt handler
+   424 00000326 3E8C4402            <1> 	mov word [ds:si+2], es	; segment of new interrupt handler
+   425                              <1> 
+   426 0000032A C3                  <1>     ret
    427                              <1> 
-   428 0000032D C3                  <1>     ret
-   429                              <1> 
-   430                              <1> ;ax = time to delay in roughlys 125 ms increments
-   431                              <1> ;https://stackoverflow.com/questions/1858640/how-can-i-create-a-sleep-function-in-16bit-masm-assembly-x86/1862232#1862232
-   432                              <1> ;converted for nasm by me
-   433                              <1> DELAY_TIMER:
-   434 0000032E FB                  <1>     STI                             ; ensure interrupts are on
-   435 0000032F 51                  <1>     PUSH    CX                      ; call-preserve CX and DS (if needed)
-   436 00000330 1E                  <1>     PUSH    DS
-   437 00000331 B94000              <1>     MOV     CX, 40H                 ; set DS to BIOS Data Area
-   438 00000334 8ED9                <1>     MOV     DS, CX
-   439 00000336 B94702              <1>     MOV     CX, 583                 ; delay_factor = 1/8 * 18.2 * 256
-   440 00000339 F7E1                <1>     MUL     CX                      ; AH (ticks) = delay_time * delay_factor
-   441 0000033B 31C9                <1>     XOR     CX, CX                  ; CX = 0
-   442 0000033D 88E1                <1>     MOV     CL, AH                  ; CX = # of ticks to wait
-   443 0000033F 3E8A266C00          <1>     MOV     AH, BYTE DS:[6CH]       ; get starting tick counter
-   444                              <1> TICK_DELAY:
-   445 00000344 F4                  <1>     HLT                             ; wait for any interrupt
-   446 00000345 3EA06C00            <1>     MOV     AL, BYTE DS:[6CH]       ; get current tick counter
-   447 00000349 38E0                <1>     CMP     AL, AH                  ; still the same?
-   448 0000034B 74F7                <1>     JZ      TICK_DELAY              ; loop if the same
-   449 0000034D 88C4                <1>     MOV     AH, AL                  ; otherwise, save new tick value to AH
-   450 0000034F E2F3                <1>     LOOP    TICK_DELAY              ; loop until # of ticks (CX) has elapsed
-   451 00000351 1F                  <1>     POP     DS
-   452 00000352 59                  <1>     POP     CX
-   453 00000353 C3                  <1>     RET
-   454                              <1> 
-   455                              <1> reboot:
-   456                              <1>     ; https://wiki.osdev.org/Reboot#Far_jump_to_the_reset_vector.2FTriple_fault
-   457 00000354 EA0000FFFF          <1>     jmp 0xFFFF:0
-   458                              <1> %include "src/kernel/memory.asm"
+   428                              <1> ;ax = time to delay in roughlys 125 ms increments
+   429                              <1> ;https://stackoverflow.com/questions/1858640/how-can-i-create-a-sleep-function-in-16bit-masm-assembly-x86/1862232#1862232
+   430                              <1> ;converted for nasm by me
+   431                              <1> DELAY_TIMER:
+   432 0000032B FB                  <1>     STI                             ; ensure interrupts are on
+   433 0000032C 51                  <1>     PUSH    CX                      ; call-preserve CX and DS (if needed)
+   434 0000032D 1E                  <1>     PUSH    DS
+   435 0000032E B94000              <1>     MOV     CX, 40H                 ; set DS to BIOS Data Area
+   436 00000331 8ED9                <1>     MOV     DS, CX
+   437 00000333 B94702              <1>     MOV     CX, 583                 ; delay_factor = 1/8 * 18.2 * 256
+   438 00000336 F7E1                <1>     MUL     CX                      ; AH (ticks) = delay_time * delay_factor
+   439 00000338 31C9                <1>     XOR     CX, CX                  ; CX = 0
+   440 0000033A 88E1                <1>     MOV     CL, AH                  ; CX = # of ticks to wait
+   441 0000033C 3E8A266C00          <1>     MOV     AH, BYTE DS:[6CH]       ; get starting tick counter
+   442                              <1> TICK_DELAY:
+   443 00000341 F4                  <1>     HLT                             ; wait for any interrupt
+   444 00000342 3EA06C00            <1>     MOV     AL, BYTE DS:[6CH]       ; get current tick counter
+   445 00000346 38E0                <1>     CMP     AL, AH                  ; still the same?
+   446 00000348 74F7                <1>     JZ      TICK_DELAY              ; loop if the same
+   447 0000034A 88C4                <1>     MOV     AH, AL                  ; otherwise, save new tick value to AH
+   448 0000034C E2F3                <1>     LOOP    TICK_DELAY              ; loop until # of ticks (CX) has elapsed
+   449 0000034E 1F                  <1>     POP     DS
+   450 0000034F 59                  <1>     POP     CX
+   451 00000350 C3                  <1>     RET
+   452                              <1> 
+   453                              <1> reboot:
+   454                              <1>     ; https://wiki.osdev.org/Reboot#Far_jump_to_the_reset_vector.2FTriple_fault
+   455 00000351 EA0000FFFF          <1>     jmp 0xFFFF:0
+   456                              <1> %include "src/kernel/memory.asm"
+   457                              <2> ;
+   458                              <2> ; in:  si = source pointer, di = destination pointer, cx = length in bytes
    459                              <2> ;
-   460                              <2> ; in:  si = source pointer, di = destination pointer, cx = length in bytes
-   461                              <2> ;
-   462                              <2> memcpy:
-   463 00000359 F3A4                <2>     rep movsb
-   464                              <2> 
-   465 0000035B C3                  <2>     ret
-   466                              <2> 
-   467                              <2> ;
-   468                              <2> ; mallocate in high mem
-   469                              <2> ; in: ebx = ammount of 512 byte chunks to allocate (not working yet, only allocates one chunk at a time)
-   470                              <2> ; out: esi = pointer to start of allocated memory
-   471                              <2> ;
-   472                              <2> ; mallocLowmem probably will not be coming anytime soon because low memory is basically the wild west currently
-   473                              <2> mallocHimem:
-   474 0000035C 6631FF              <2>     xor edi, edi
-   475 0000035F 6631F6              <2>     xor esi, esi
-   476                              <2> .loop:
-   477 00000362 6681FF00040000      <2>     cmp word edi, 1024
-   477          ******************  <2>  warning: invalid register size specification ignored [-w+regsize]
-   478 00000369 742F                <2>     je .fail
-   479                              <2> 
-   480 0000036B 6780BF[9B030000]00  <2>     cmp byte memoryTableHi[edi], 0
-   481 00000373 7404                <2>     je .end
-   482                              <2> 
-   483 00000375 6647                <2>     inc edi
-   484                              <2> 
-   485 00000377 EBE9                <2>     jmp .loop
-   486                              <2> 
-   487                              <2> .end:
-   488 00000379 66B800020000        <2>     mov eax, 512
-   489 0000037F 66F7E7              <2>     mul edi
-   490                              <2> 
-   491 00000382 66B900001000        <2>     mov ecx, 0x00100000 ; memory allocation starts at the very start of hi mem which is 14 mib before the ISA hole
-   492 00000388 66F7E1              <2>     mul ecx
-   493                              <2> 
-   494 0000038B 6601C8              <2>     add eax, ecx
-   495                              <2> 
-   496 0000038E 6689C6              <2>     mov esi, eax
-   497 00000391 67C687[9B030000]01  <2>     mov byte memoryTableHi[edi], 1
-   498 00000399 C3                  <2>     ret
-   499                              <2> 
-   500                              <2> .fail:
-   501 0000039A C3                  <2>     ret
-   502                              <2> 
-   503 0000039B <res 400h>          <2> memoryTableHi: resb 1024 ; big enough table for 512k of dynamically allocated mem
-   503          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
-   459                              <1> %include "src/bia/machine.asm"
-   460                              <2> ;
-   461                              <2> ; wip for running machine code
-   462                              <2> ; 2022 Lilly
-   463                              <2> ;
-   464                              <2> 
-   465                              <2>     ;  9 00000011 BE207C                  mov si, 7c20h ; random part of a string in bootloader
-   466                              <2>     ; 10 00000014 CD73                    int 0x73
-   467                              <2> 
-   468                              <2> 
-   469                              <2> ; code: db 0xbe,0x20,0x7c,0xcd,0x73
-   470                              <2> 
-   471 0000079B 90<rep 200h>        <2> initcode: times 512 nop ; code space for your program to load more stuff from elsewhere
-   472                              <2> initcodeEnd:
-   473                              <2>     ; mov si, 7c20h
-   474                              <2>     ; int 73h
-   475 0000099B EBFE                <2>     jmp $
-   476 0000099D 0000                <2> editLocation: dw 0
-   477                              <2> runMachineCode:
-   478                              <2> 
-   479 0000099F E9F9FD              <2>     jmp initcode
-   480                              <2> 
-   481                              <2> ; ax = char input (x2)
-   482                              <2> ; bl = byte out
-   483                              <2> ; a = 0, b = 1, c = 2, d = 3, e = 4, f = 5, g = 6, h = 7, i = 8, j = 9, k = 10
-   484                              <2> ; l = 11, m = 12, n = 13, o = 14, p = 15 
-   485                              <2> charsToNibbles:
-   486 000009A2 2C61                <2>     sub al, 97
-   487 000009A4 80EC61              <2>     sub ah, 97
-   488                              <2> 
-   489 000009A7 B104                <2>     mov cl, 4  ; using cl for compatability with cpu older than 80186
-   490 000009A9 D2C4                <2>     rol ah, cl 
-   491 000009AB 88E1                <2>     mov cl, ah
-   492                              <2> 
-   493 000009AD 00C8                <2>     add al, cl
-   494                              <2> 
-   495 000009AF 88C3                <2>     mov bl, al
-   496                              <2> 
-   497 000009B1 C3                  <2>     ret
-   498                              <2> ; tiny "editor" for the machine code
-   499                              <2> ; loads code at 0x1000
-   500                              <2> machineEdit:
-   501                              <2>     ; makes the word "0x0001" and prints it
-   502                              <2> 
-   503                              <2> 
-   504                              <2> 
-   505                              <2>     ; 11 00000016 BE207C                  mov si, 7c20h
-   506                              <2>     ; 12 00000019 CD73                    int 0x73
-   507                              <2> 
-   508 000009B2 B86C6F              <2>     mov ax, "lo"
-   509 000009B5 E8EAFF              <2>     call charsToNibbles
-   510 000009B8 881E[9B07]          <2>     mov [initcode], bl
-   511 000009BC B86361              <2>     mov ax, "ca"
-   512 000009BF E8E0FF              <2>     call charsToNibbles
-   513 000009C2 881E[9C07]          <2>     mov [initcode+1], bl
-   514 000009C6 B8686D              <2>     mov ax, "hm"
-   515 000009C9 E8D6FF              <2>     call charsToNibbles
-   516 000009CC 881E[9D07]          <2>     mov [initcode+2], bl
-   517 000009D0 B86D6E              <2>     mov ax, "mn"
-   518 000009D3 E8CCFF              <2>     call charsToNibbles
-   519 000009D6 881E[9E07]          <2>     mov [initcode+3], bl
-   520 000009DA B86864              <2>     mov ax, "hd"
-   521 000009DD E8C2FF              <2>     call charsToNibbles
-   522 000009E0 881E[9F07]          <2>     mov [initcode+4], bl
-   523                              <2>     ; mov dx, [initcode]
-   524                              <2>     ; call print_hex
-   525 000009E4 E9B4FD              <2>     jmp initcode
-   526                              <2>     
-   527                              <2> .loop:
-   528                              <2> 
-   529 000009E7 31C0                <2>     xor ax, ax
-   530 000009E9 CD16                <2>     int 0x16
-   531                              <2> 
-   532 000009EB 80FC1C              <2>     cmp ah, 0x1c
-   533 000009EE 741A                <2>     je .enter
-   534 000009F0 80FC39              <2>     cmp ah, 0x39
-   535 000009F3 741F                <2>     je .byteFinished
-   536                              <2> 
-   537 000009F5 8B2E[2A0A]          <2>     mov bp, [byteStringPos]
-   538 000009F9 8886[2A0A]          <2>     mov [byteStringPos+bp], al
-   539                              <2> 
-   540 000009FD 803E[2A0A]01        <2>     cmp byte [byteStringPos], 1
-   541 00000A02 7409                <2>     je .resetByteStringPos
-   542                              <2> 
-   543 00000A04 FE06[2A0A]          <2>     inc byte [byteStringPos]
-   544                              <2> 
-   545 00000A08 EBDD                <2>     jmp .loop
-   546                              <2> 
-   547                              <2> .enter:
-   548                              <2> 
-   549                              <2>     ; call clearscreen
-   550                              <2> 
-   551 00000A0A E98EFD              <2>     jmp initcode
-   552                              <2> .resetByteStringPos:
-   553                              <2> 
-   554 00000A0D C606[2A0A]00        <2>     mov byte [byteStringPos], 0
-   555 00000A12 EBD3                <2>     jmp .loop
-   556                              <2> 
-   557                              <2> .byteFinished:
-   558                              <2> 
-   559 00000A14 A1[280A]            <2>     mov ax, [currentByteString]
-   560 00000A17 E888FF              <2>     call charsToNibbles
-   561                              <2> 
-   562 00000A1A 8B2E[9D09]          <2>     mov bp, [editLocation]
-   563 00000A1E 889E[9B07]          <2>     mov byte [initcode+bp], bl
-   564                              <2> 
-   565 00000A22 FF06[9D09]          <2>     inc word [editLocation]
-   566                              <2> 
-   567 00000A26 EBE5                <2>     jmp .resetByteStringPos
-   568 00000A28 02                  <2> currentByteString: db 2
-   569 00000A29 00                  <2> db 0
-   570 00000A2A 01                  <2> byteStringPos: db 1
-   460                              <1> %include "src/kernel/ata.asm"
-   461                              <2> ;
-   462                              <2> ;
-   463                              <2> ;
-   464                              <2> ;
-   465                              <2> ata_read_sector:
-   466 00000A2B C3                  <2>     ret
-   461                              <1> %include "src/kernel/vga.asm"
+   460                              <2> memcpy:
+   461 00000356 F3A4                <2>     rep movsb
    462                              <2> 
-   463                              <2> bits 16
+   463 00000358 C3                  <2>     ret
    464                              <2> 
    465                              <2> ;
-   466                              <2> ;   in:  nothing
-   467                              <2> ;   out: nothing
-   468                              <2> ;
-   469                              <2> startVGA:
-   470 00000A2C B81300              <2>     mov ax, 013h
-   471 00000A2F CD10                <2>     int 10h ; 320x200 16 color
-   472 00000A31 C3                  <2>     ret
-   473                              <2> 
-   474                              <2> ;
-   475                              <2> ;   in:  ax = Y coord, bx = X coord, dl = color
-   476                              <2> ;   out: nothing
-   477                              <2> ;
-   478                              <2> putPixel:
-   479                              <2> 
-   480 00000A32 60                  <2>     pusha
-   481                              <2> 
-   482 00000A33 B800A0              <2>     mov ax, 0a000h
-   483 00000A36 8EC0                <2>     mov es, ax
+   466                              <2> ; mallocate in high mem
+   467                              <2> ; in: ebx = ammount of 512 byte chunks to allocate (not working yet, only allocates one chunk at a time)
+   468                              <2> ; out: esi = pointer to start of allocated memory
+   469                              <2> ;
+   470                              <2> ; mallocLowmem probably will not be coming anytime soon because low memory is basically the wild west currently
+   471                              <2> mallocHimem:
+   472 00000359 6631FF              <2>     xor edi, edi
+   473 0000035C 6631F6              <2>     xor esi, esi
+   474                              <2> .loop:
+   475 0000035F 6681FF00040000      <2>     cmp word edi, 1024
+   475          ******************  <2>  warning: invalid register size specification ignored [-w+regsize]
+   476 00000366 742F                <2>     je .fail
+   477                              <2> 
+   478 00000368 6780BF[98030000]00  <2>     cmp byte memoryTableHi[edi], 0
+   479 00000370 7404                <2>     je .end
+   480                              <2> 
+   481 00000372 6647                <2>     inc edi
+   482                              <2> 
+   483 00000374 EBE9                <2>     jmp .loop
    484                              <2> 
-   485 00000A38 89D5                <2>     mov bp, dx               ; oops, mul changes dx too
-   486 00000A3A B94001              <2>     mov cx, 320
-   487 00000A3D F7E1                <2>     mul cx                ; multiply Y (ax) by 320 (one row)
-   488 00000A3F 01D8                <2>     add ax, bx            ; and add X (bx) (result= dx:ax)
-   489 00000A41 89C7                <2>     mov di, ax
-   490 00000A43 89EA                <2>     mov dx, bp
-   491 00000A45 268815              <2>     mov [es:di], dl       ; store color/pixel
-   492 00000A48 C3                  <2>     ret
+   485                              <2> .end:
+   486 00000376 66B800020000        <2>     mov eax, 512
+   487 0000037C 66F7E7              <2>     mul edi
+   488                              <2> 
+   489 0000037F 66B900001000        <2>     mov ecx, 0x00100000 ; memory allocation starts at the very start of hi mem which is 14 mib before the ISA hole
+   490 00000385 66F7E1              <2>     mul ecx
+   491                              <2> 
+   492 00000388 6601C8              <2>     add eax, ecx
    493                              <2> 
-   494 00000A49 61                  <2>     popa
+   494 0000038B 6689C6              <2>     mov esi, eax
+   495 0000038E 67C687[98030000]01  <2>     mov byte memoryTableHi[edi], 1
+   496 00000396 C3                  <2>     ret
+   497                              <2> 
+   498                              <2> .fail:
+   499 00000397 C3                  <2>     ret
+   500                              <2> 
+   501 00000398 <res 400h>          <2> memoryTableHi: resb 1024 ; big enough table for 512k of dynamically allocated mem
+   501          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
+   457                              <1> %include "src/bia/machine.asm"
+   458                              <2> ;
+   459                              <2> ; wip for running machine code
+   460                              <2> ; 2022 Lilly
+   461                              <2> ;
+   462                              <2> 
+   463 00000798 90<rep 200h>        <2> initcode: times 512 nop ; code space for your program to load more stuff from elsewhere
+   464                              <2> initcodeEnd:
+   465 00000998 E912F9              <2>     jmp kernel_loop
+   466 0000099B 0000                <2> editLocation: dw 0
+   467                              <2> runMachineCode:
+   468 0000099D E850F8              <2>     call clearscreen
+   469 000009A0 E9F5FD              <2>     jmp initcode
+   470                              <2> 
+   471                              <2> ; cx = char input (x2)
+   472                              <2> ; cl = byte out
+   473                              <2> ; a = 0, b = 1, c = 2, d = 3, e = 4, f = 5, g = 6, h = 7, i = 8, j = 9, k = 10
+   474                              <2> ; l = 11, m = 12, n = 13, o = 14, p = 15 
+   475                              <2> charsToNibbles:
+   476 000009A3 80E961              <2>     sub cl, 97 ; a is ascii 97 so this converts the alphabet into int
+   477 000009A6 80ED61              <2>     sub ch, 97 ;
+   478                              <2> 
+   479 000009A9 F086CD              <2>     lock xchg cl, ch ; swap first and second char
+   479          ******************  <2>  warning: instruction is not lockable [-w+lock]
+   480                              <2>                      ; lock prefix insures we dont get interrupted during xchg
+   481                              <2> 
+   482 000009AC C0C504              <2>     rol ch, 4  ; rotate left by 4 bits
+   483 000009AF 00E9                <2>     add cl, ch ; put the two numbers back together
+   484                              <2> 
+   485 000009B1 C3                  <2>     ret
+   486                              <2> 
+   487                              <2> ; tiny "editor" for the machine code
+   488                              <2> ; loads code at 0x1000
+   489                              <2> machineEdit:
+   490 000009B2 E83BF8              <2>     call clearscreen
+   491 000009B5 31ED                <2>     xor bp, bp
+   492                              <2> .loop:
+   493 000009B7 31C0                <2>     xor ax, ax
+   494 000009B9 CD16                <2>     int 16h
    495                              <2> 
-   496                              <2> ;
-   497                              <2> ;   in: ax = Y coord, bx = X coord, ch = char
-   498                              <2> ;   out: nothing
-   499                              <2> ;
-   500                              <2> drawChar:
-   501                              <2>     ; WIP
-   502 00000A4A C3                  <2>     ret
-   462                              <1> %include "src/kernel/svga.asm"
-   463                              <2> 
-   464                              <2> bits 16
-   463                              <1> %include "src/kernel/terminal.asm"
-   464                              <2> 
-   465 00000A4B 51574552545955494F- <2> qwetry db 'QWERTYUIOP[]', 10, 0, 'ASDFGHJKL:', 39, '~', 0, '|ZXCVBNM<>/'
-   465 00000A54 505B5D0A0041534446- <2>
-   465 00000A5D 47484A4B4C3A277E00- <2>
-   465 00000A66 7C5A584356424E4D3C- <2>
-   465 00000A6F 3E2F                <2>
-   466 00000A71 0000                <2> charInp db 0, 0
-   467 00000A73 2000                <2> space db " ", 0x0
-   468 00000A75 48414C5400          <2> haltcmd db "HALT", 0x0
-   469 00000A7A 5445585400          <2> textcmd db "TEXT", 0x0
-   470 00000A7F 5245424F4F5400      <2> rebootcmd db "REBOOT", 0x0
+   496 000009BB 3C20                <2>     cmp al, 0x20
+   497 000009BD 7415                <2>     je .doneByte
+   498 000009BF 3C1B                <2>     cmp al, 0x1b
+   499 000009C1 74DA                <2>     je runMachineCode
+   500                              <2> 
+   501 000009C3 8886[FA09]          <2>     mov [currentByte+bp], al
+   502                              <2> 
+   503 000009C7 83FD01              <2>     cmp bp, 1
+   504 000009CA 7403                <2>     je .decBP
+   505                              <2> 
+   506 000009CC 45                  <2>     inc bp
+   507                              <2> 
+   508 000009CD EBE8                <2>     jmp .loop
+   509                              <2> .decBP:
+   510 000009CF BD0000              <2>     mov bp, 0
+   511 000009D2 EBE3                <2>     jmp .loop
+   512                              <2> 
+   513                              <2> .doneByte:
+   514 000009D4 8B0E[FA09]          <2>     mov cx, [currentByte]
+   515 000009D8 E8C8FF              <2>     call charsToNibbles
+   516                              <2> 
+   517 000009DB 60                  <2>     pusha
+   518 000009DC BE[FA09]            <2>     mov si, currentByte
+   519 000009DF E8C0F7              <2>     call print_string
+   520 000009E2 61                  <2>     popa
+   521                              <2> 
+   522 000009E3 8B1E[9B09]          <2>     mov bx, [editLocation]
+   523 000009E7 888F[9807]          <2>     mov byte [initcode+bx], cl
+   524 000009EB FF06[9B09]          <2>     inc word [editLocation]
+   525 000009EF C706[FA09]0000      <2>     mov word [currentByte], 0
+   526 000009F5 BD0000              <2>     mov bp, 0
+   527 000009F8 EBBD                <2>     jmp .loop
+   528 000009FA ????                <2> currentByte: resb 2
+   528          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
+   529 000009FC 20                  <2> db " "
+   530 000009FD 00                  <2> db 0
+   458                              <1> %include "src/kernel/ata.asm"
+   459                              <2> ;
+   460                              <2> ;
+   461                              <2> ;
+   462                              <2> ;
+   463                              <2> ata_read_sector:
+   464 000009FE C3                  <2>     ret
+   459                              <1> %include "src/kernel/vga.asm"
+   460                              <2> 
+   461                              <2> bits 16
+   462                              <2> 
+   463                              <2> ;
+   464                              <2> ;   in:  nothing
+   465                              <2> ;   out: nothing
+   466                              <2> ;
+   467                              <2> startVGA:
+   468 000009FF B81300              <2>     mov ax, 013h
+   469 00000A02 CD10                <2>     int 10h ; 320x200 16 color
+   470 00000A04 C3                  <2>     ret
    471                              <2> 
-   472 00000A86 202020202020202020- <2> commie db "                                        ", 0xa, 0xd
-   472 00000A8F 202020202020202020- <2>
-   472 00000A98 202020202020202020- <2>
-   472 00000AA1 202020202020202020- <2>
-   472 00000AAA 202020200A0D        <2>
-   473 00000AB0 202020202020202020- <2> db "                       *@@@/             ", 0xa, 0xd
-   473 00000AB9 202020202020202020- <2>
-   473 00000AC2 20202020202A404040- <2>
-   473 00000ACB 2F2020202020202020- <2>
-   473 00000AD4 20202020200A0D      <2>
-   474 00000ADB 202020202020202020- <2> db "                          ,@@@@          ", 0xa, 0xd
-   474 00000AE4 202020202020202020- <2>
-   474 00000AED 20202020202020202C- <2>
-   474 00000AF6 404040402020202020- <2>
-   474 00000AFF 20202020200A0D      <2>
-   475 00000B06 202020202020202020- <2> db "          @@@@@@@@@          @@@@@       ", 0xa, 0xd
-   475 00000B0F 204040404040404040- <2>
-   475 00000B18 402020202020202020- <2>
-   475 00000B21 202040404040402020- <2>
-   475 00000B2A 20202020200A0D      <2>
-   476 00000B31 202020202020202F40- <2> db "       /@@@@@@@@@             *@@@@.     ", 0xa, 0xd
-   476 00000B3A 404040404040404020- <2>
-   476 00000B43 202020202020202020- <2>
-   476 00000B4C 2020202A404040402E- <2>
-   476 00000B55 20202020200A0D      <2>
-   477 00000B5C 202020202040404040- <2> db "     @@@@@@@@@@@@               @@@@*    ", 0xa, 0xd
-   477 00000B65 404040404040404020- <2>
-   477 00000B6E 202020202020202020- <2>
-   477 00000B77 202020202040404040- <2>
-   477 00000B80 2A202020200A0D      <2>
-   478 00000B87 202020204040404040- <2> db "    @@@@@@@@&@@@@@@@            @@@@@    ", 0xa, 0xd
-   478 00000B90 404040264040404040- <2>
-   478 00000B99 404020202020202020- <2>
-   478 00000BA2 202020202040404040- <2>
-   478 00000BAB 40202020200A0D      <2>
-   479 00000BB2 202020202020204040- <2> db "       @@@.    /@@@@@@&         *@@@@(   ", 0xa, 0xd
-   479 00000BBB 402E202020202F4040- <2>
-   479 00000BC4 404040402620202020- <2>
-   479 00000BCD 20202020202A404040- <2>
-   479 00000BD6 40282020200A0D      <2>
-   480 00000BDD 202020202020202020- <2> db "                  (@@@@@@&      @@@@@#   ", 0xa, 0xd
-   480 00000BE6 202020202020202020- <2>
-   480 00000BEF 284040404040402620- <2>
-   480 00000BF8 202020202040404040- <2>
-   480 00000C01 40232020200A0D      <2>
-   481 00000C08 202020202020202020- <2> db "                     %@@@@@@#  @@@@@@    ", 0xa, 0xd
-   481 00000C11 202020202020202020- <2>
-   481 00000C1A 202020254040404040- <2>
-   481 00000C23 402320204040404040- <2>
-   481 00000C2C 40202020200A0D      <2>
-   482 00000C33 202020202020202020- <2> db "           @&           &@@@@@@@@@@@/    ", 0xa, 0xd
-   482 00000C3C 202040262020202020- <2>
-   482 00000C45 202020202020264040- <2>
-   482 00000C4E 404040404040404040- <2>
-   482 00000C57 2F202020200A0D      <2>
-   483 00000C5E 202020202020404023- <2> db "      @@#@@@@@@&          @@@@@@@@@      ", 0xa, 0xd
-   483 00000C67 404040404040262020- <2>
-   483 00000C70 202020202020202040- <2>
-   483 00000C79 404040404040404020- <2>
-   483 00000C82 20202020200A0D      <2>
-   484 00000C89 202020202020404040- <2> db "      @@@@@  @@@@@@@@@@@@@@@@@@@@@@@@.   ", 0xa, 0xd
-   484 00000C92 404020204040404040- <2>
-   484 00000C9B 404040404040404040- <2>
-   484 00000CA4 404040404040404040- <2>
-   484 00000CAD 402E2020200A0D      <2>
-   485 00000CB4 20202040404040402A- <2> db "   @@@@@*       ,@@@@@@@@@@@@.   /@@@@@@,", 0xa, 0xd
-   485 00000CBD 202020202020202C40- <2>
-   485 00000CC6 404040404040404040- <2>
-   485 00000CCF 40402E2020202F4040- <2>
-   485 00000CD8 404040402C0A0D      <2>
-   486 00000CDF 202F40404040402020- <2> db " /@@@@@                             (@@@@", 0
-   486 00000CE8 202020202020202020- <2>
-   486 00000CF1 202020202020202020- <2>
-   486 00000CFA 202020202020202020- <2>
-   486 00000D03 284040404000        <2>
+   472                              <2> ;
+   473                              <2> ;   in:  ax = Y coord, bx = X coord, dl = color
+   474                              <2> ;   out: nothing
+   475                              <2> ;
+   476                              <2> putPixel:
+   477                              <2> 
+   478 00000A05 60                  <2>     pusha
+   479                              <2> 
+   480 00000A06 B800A0              <2>     mov ax, 0a000h
+   481 00000A09 8EC0                <2>     mov es, ax
+   482                              <2> 
+   483 00000A0B 89D5                <2>     mov bp, dx               ; oops, mul changes dx too
+   484 00000A0D B94001              <2>     mov cx, 320
+   485 00000A10 F7E1                <2>     mul cx                ; multiply Y (ax) by 320 (one row)
+   486 00000A12 01D8                <2>     add ax, bx            ; and add X (bx) (result= dx:ax)
+   487 00000A14 89C7                <2>     mov di, ax
+   488 00000A16 89EA                <2>     mov dx, bp
+   489 00000A18 268815              <2>     mov [es:di], dl       ; store color/pixel
+   490 00000A1B C3                  <2>     ret
+   491                              <2> 
+   492 00000A1C 61                  <2>     popa
+   493                              <2> 
+   494                              <2> ;
+   495                              <2> ;   in: ax = Y coord, bx = X coord, ch = char
+   496                              <2> ;   out: nothing
+   497                              <2> ;
+   498                              <2> drawChar:
+   499                              <2>     ; WIP
+   500 00000A1D C3                  <2>     ret
+   460                              <1> %include "src/kernel/svga.asm"
+   461                              <2> 
+   462                              <2> bits 16
+   461                              <1> %include "src/kernel/terminal.asm"
+   462                              <2> 
+   463 00000A1E 51574552545955494F- <2> qwetry db 'QWERTYUIOP[]', 10, 0, 'ASDFGHJKL:', 39, '~', 0, '|ZXCVBNM<>/'
+   463 00000A27 505B5D0A0041534446- <2>
+   463 00000A30 47484A4B4C3A277E00- <2>
+   463 00000A39 7C5A584356424E4D3C- <2>
+   463 00000A42 3E2F                <2>
+   464 00000A44 0000                <2> charInp db 0, 0
+   465 00000A46 2000                <2> space db " ", 0x0
+   466 00000A48 48414C5400          <2> haltcmd db "HALT", 0x0
+   467 00000A4D 5445585400          <2> textcmd db "TEXT", 0x0
+   468 00000A52 5245424F4F5400      <2> rebootcmd db "REBOOT", 0x0
+   469 00000A59 4D414348494E4500    <2> machinecmd db "MACHINE", 0x0
+   470                              <2> 
+   471                              <2> commie:
+   472 00000A61 202020202020202020- <2>  db "                     ,.                 ", 0xa, 0xd
+   472 00000A6A 202020202020202020- <2>
+   472 00000A73 2020202C2E20202020- <2>
+   472 00000A7C 202020202020202020- <2>
+   472 00000A85 202020200A0D        <2>
+   473 00000A8B 202020202020202020- <2> db "                       *@@@/             ", 0xa, 0xd
+   473 00000A94 202020202020202020- <2>
+   473 00000A9D 20202020202A404040- <2>
+   473 00000AA6 2F2020202020202020- <2>
+   473 00000AAF 20202020200A0D      <2>
+   474 00000AB6 202020202020202020- <2> db "                          ,@@@@          ", 0xa, 0xd
+   474 00000ABF 202020202020202020- <2>
+   474 00000AC8 20202020202020202C- <2>
+   474 00000AD1 404040402020202020- <2>
+   474 00000ADA 20202020200A0D      <2>
+   475 00000AE1 202020202020202020- <2> db "          @@@@@@@@@          @@@@@       ", 0xa, 0xd
+   475 00000AEA 204040404040404040- <2>
+   475 00000AF3 402020202020202020- <2>
+   475 00000AFC 202040404040402020- <2>
+   475 00000B05 20202020200A0D      <2>
+   476 00000B0C 202020202020202F40- <2> db "       /@@@@@@@@@             *@@@@.     ", 0xa, 0xd
+   476 00000B15 404040404040404020- <2>
+   476 00000B1E 202020202020202020- <2>
+   476 00000B27 2020202A404040402E- <2>
+   476 00000B30 20202020200A0D      <2>
+   477 00000B37 202020202040404040- <2> db "     @@@@@@@@@@@@               @@@@*    ", 0xa, 0xd
+   477 00000B40 404040404040404020- <2>
+   477 00000B49 202020202020202020- <2>
+   477 00000B52 202020202040404040- <2>
+   477 00000B5B 2A202020200A0D      <2>
+   478 00000B62 202020204040404040- <2> db "    @@@@@@@@&@@@@@@@            @@@@@    ", 0xa, 0xd
+   478 00000B6B 404040264040404040- <2>
+   478 00000B74 404020202020202020- <2>
+   478 00000B7D 202020202040404040- <2>
+   478 00000B86 40202020200A0D      <2>
+   479 00000B8D 202020202020204040- <2> db "       @@@.    /@@@@@@&         *@@@@(   ", 0xa, 0xd
+   479 00000B96 402E202020202F4040- <2>
+   479 00000B9F 404040402620202020- <2>
+   479 00000BA8 20202020202A404040- <2>
+   479 00000BB1 40282020200A0D      <2>
+   480 00000BB8 202020202020202020- <2> db "                  (@@@@@@&      @@@@@#   ", 0xa, 0xd
+   480 00000BC1 202020202020202020- <2>
+   480 00000BCA 284040404040402620- <2>
+   480 00000BD3 202020202040404040- <2>
+   480 00000BDC 40232020200A0D      <2>
+   481 00000BE3 202020202020202020- <2> db "                     %@@@@@@#  @@@@@@    ", 0xa, 0xd
+   481 00000BEC 202020202020202020- <2>
+   481 00000BF5 202020254040404040- <2>
+   481 00000BFE 402320204040404040- <2>
+   481 00000C07 40202020200A0D      <2>
+   482 00000C0E 202020202020202020- <2> db "           @&           &@@@@@@@@@@@/    ", 0xa, 0xd
+   482 00000C17 202040262020202020- <2>
+   482 00000C20 202020202020264040- <2>
+   482 00000C29 404040404040404040- <2>
+   482 00000C32 2F202020200A0D      <2>
+   483 00000C39 202020202020404023- <2> db "      @@#@@@@@@&          @@@@@@@@@      ", 0xa, 0xd
+   483 00000C42 404040404040262020- <2>
+   483 00000C4B 202020202020202040- <2>
+   483 00000C54 404040404040404020- <2>
+   483 00000C5D 20202020200A0D      <2>
+   484 00000C64 202020202020404040- <2> db "      @@@@@  @@@@@@@@@@@@@@@@@@@@@@@@.   ", 0xa, 0xd
+   484 00000C6D 404020204040404040- <2>
+   484 00000C76 404040404040404040- <2>
+   484 00000C7F 404040404040404040- <2>
+   484 00000C88 402E2020200A0D      <2>
+   485 00000C8F 20202040404040402A- <2> db "   @@@@@*       ,@@@@@@@@@@@@.   /@@@@@@,", 0xa, 0xd
+   485 00000C98 202020202020202C40- <2>
+   485 00000CA1 404040404040404040- <2>
+   485 00000CAA 40402E2020202F4040- <2>
+   485 00000CB3 404040402C0A0D      <2>
+   486 00000CBA 202F40404040402020- <2> db " /@@@@@                             (@@@@", 0
+   486 00000CC3 202020202020202020- <2>
+   486 00000CCC 202020202020202020- <2>
+   486 00000CD5 202020202020202020- <2>
+   486 00000CDE 284040404000        <2>
    487                              <2> 
-   488 00000D09 00<rep 64h>         <2> termRam times 100 db 0
-   489 00000D6D 0000                <2> termRamPos dw 0x0
-   490 00000D6F 242000              <2> termChar db "$ ", 0
-   491 00000D72 <res 64h>           <2> commandsListPointers resw 50
+   488 00000CE4 00<rep 64h>         <2> termRam times 100 db 0
+   489 00000D48 0000                <2> termRamPos dw 0x0
+   490 00000D4A 242000              <2> termChar db "$ ", 0
+   491 00000D4D <res 64h>           <2> commandsListPointers resw 50
    491          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
-   492 00000DD6 <res 64h>           <2> commandsListStringPointers resw 50
+   492 00000DB1 <res 64h>           <2> commandsListStringPointers resw 50
    492          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
-   493 00000E3A 434F4D4D494500      <2> commiecmd db "COMMIE", 0
+   493 00000E15 434F4D4D494500      <2> commiecmd db "COMMIE", 0
    494                              <2> 
    495                              <2> commieDraw:
-   496 00000E41 31D2                <2>     xor dx, dx
-   497 00000E43 E8A3F3              <2>     call movecursor
-   498 00000E46 BE[860A]            <2>     mov si, commie
-   499 00000E49 E856F3              <2>     call print_string
-   500 00000E4C 31C0                <2>     xor ax, ax
-   501 00000E4E CD16                <2>     int 16h
-   502 00000E50 C3                  <2>     ret
+   496 00000E1C 31D2                <2>     xor dx, dx
+   497 00000E1E E8C8F3              <2>     call movecursor
+   498 00000E21 BE[610A]            <2>     mov si, commie
+   499 00000E24 E87BF3              <2>     call print_string
+   500 00000E27 31C0                <2>     xor ax, ax
+   501 00000E29 CD16                <2>     int 16h
+   502 00000E2B C3                  <2>     ret
    503                              <2> setupInitalCommands:
-   504 00000E51 60                  <2>     pusha
+   504 00000E2C 60                  <2>     pusha
    505                              <2> 
-   506 00000E52 BD[F811]            <2>     mov bp, text
-   507 00000E55 892E[720D]          <2>     mov [commandsListPointers+0], bp
-   508 00000E59 BD[7A0A]            <2>     mov bp, textcmd
-   509 00000E5C 892E[D60D]          <2>     mov [commandsListStringPointers+0], bp
+   506 00000E2D BD[E111]            <2>     mov bp, text
+   507 00000E30 892E[4D0D]          <2>     mov [commandsListPointers+0], bp
+   508 00000E34 BD[4D0A]            <2>     mov bp, textcmd
+   509 00000E37 892E[B10D]          <2>     mov [commandsListStringPointers+0], bp
    510                              <2> 
-   511 00000E60 BD[5403]            <2>     mov bp, reboot
-   512 00000E63 892E[740D]          <2>     mov [commandsListPointers+2], bp
-   513 00000E67 BD[7F0A]            <2>     mov bp, rebootcmd
-   514 00000E6A 892E[D80D]          <2>     mov [commandsListStringPointers+2], bp
+   511 00000E3B BD[5103]            <2>     mov bp, reboot
+   512 00000E3E 892E[4F0D]          <2>     mov [commandsListPointers+2], bp
+   513 00000E42 BD[520A]            <2>     mov bp, rebootcmd
+   514 00000E45 892E[B30D]          <2>     mov [commandsListStringPointers+2], bp
    515                              <2> 
-   516 00000E6E BD[9A01]            <2>     mov bp, halt
-   517 00000E71 892E[760D]          <2>     mov [commandsListPointers+4], bp
-   518 00000E75 BD[750A]            <2>     mov bp, haltcmd
-   519 00000E78 892E[DA0D]          <2>     mov [commandsListStringPointers+4], bp
+   516 00000E49 BD[9A01]            <2>     mov bp, halt
+   517 00000E4C 892E[510D]          <2>     mov [commandsListPointers+4], bp
+   518 00000E50 BD[480A]            <2>     mov bp, haltcmd
+   519 00000E53 892E[B50D]          <2>     mov [commandsListStringPointers+4], bp
    520                              <2> 
-   521 00000E7C BD[410E]            <2>     mov bp, commieDraw
-   522 00000E7F 892E[780D]          <2>     mov [commandsListPointers+6], bp
-   523 00000E83 BD[3A0E]            <2>     mov bp, commiecmd
-   524 00000E86 892E[DC0D]          <2>     mov [commandsListStringPointers+6], bp
+   521 00000E57 BD[1C0E]            <2>     mov bp, commieDraw
+   522 00000E5A 892E[530D]          <2>     mov [commandsListPointers+6], bp
+   523 00000E5E BD[150E]            <2>     mov bp, commiecmd
+   524 00000E61 892E[B70D]          <2>     mov [commandsListStringPointers+6], bp
    525                              <2> 
-   526 00000E8A 61                  <2>     popa
-   527 00000E8B C3                  <2>     ret
-   528                              <2> getChar:
-   529                              <2> 
-   530 00000E8C 31C0                <2>     xor ax, ax
-   531 00000E8E CD16                <2>     int 0x16
-   532 00000E90 88E0                <2>     mov al, ah
-   533 00000E92 3C01                <2>     cmp al, 1 ; esc
-   534 00000E94 752B                <2>     jne notEsc
-   535 00000E96 E857F3              <2>     call clearscreen
-   536                              <2> 
-   537 00000E99 BA0000              <2>     mov dx, 0
-   538 00000E9C E84AF3              <2>     call movecursor
-   539                              <2> 
-   540 00000E9F C706[6D0D]0000      <2>     mov word [termRamPos], 0
-   541 00000EA5 31C9                <2>     xor cx, cx
-   542                              <2> 
-   543                              <2> escLoop:
-   544                              <2> 
-   545                              <2> 
-   546 00000EA7 890E[6D0D]          <2>     mov [termRamPos], cx
-   547 00000EAB 8B1E[6D0D]          <2>     mov bx, [termRamPos]
-   548 00000EAF C687[090D]00        <2>     mov byte [termRam + bx], 0
-   549                              <2> 
-   550 00000EB4 41                  <2>     inc cx
-   551 00000EB5 83F963              <2>     cmp cx, 99
-   552 00000EB8 75ED                <2>     jne escLoop
-   553                              <2> 
-   554 00000EBA C706[6D0D]0000      <2>     mov word [termRamPos], 0
-   555                              <2> 
-   556 00000EC0 C3                  <2>     ret
-   557                              <2> notEsc:
-   558                              <2> 
-   559 00000EC1 3C1C                <2>     cmp al, 0x1c
-   560 00000EC3 7477                <2>     je runCMD
-   561 00000EC5 3C39                <2>     cmp al, 0x39
-   562 00000EC7 7444                <2>     je spaceP
-   563 00000EC9 3C0E                <2>     cmp al, 0x0e
-   564 00000ECB 740E                <2>     je backspaceP
-   565 00000ECD 3C35                <2>     cmp al, 0x35 ; highest scan code
-   566 00000ECF 7744                <2>     ja done
-   567 00000ED1 2C10                <2>     sub al, 0x10 ; lowest scan code
-   568 00000ED3 7240                <2>     jb done
-   569 00000ED5 BB[4B0A]            <2>     mov bx, qwetry
-   570 00000ED8 D7                  <2>     xlat
-   571                              <2>     ; mov [charInp], al
-   572                              <2>     ; mov si, charInp
-   573                              <2>     ; call print_string
-   574                              <2> 
-   575 00000ED9 EB3A                <2>     jmp done
-   576                              <2> 
-   577                              <2> backspaceP:
-   578                              <2> 
-   579 00000EDB 833E[6D0D]00        <2>     cmp word [termRamPos], 0
-   580 00000EE0 742A                <2>     je backspacePdone
-   581                              <2> 
-   582 00000EE2 FF0E[6D0D]          <2>     dec word [termRamPos]
-   583 00000EE6 8B1E[6D0D]          <2>     mov bx, [termRamPos]
-   584 00000EEA C687[090D]00        <2>     mov byte [termRam + bx], 0
-   585                              <2> 
-   586 00000EEF 8A16[6D0D]          <2>     mov byte dl, [termRamPos]
-   587 00000EF3 B600                <2>     mov dh, 0
-   588 00000EF5 E8F1F2              <2>     call movecursor
-   589                              <2> 
-   590 00000EF8 BE[730A]            <2>     mov si, space
-   591 00000EFB E8A4F2              <2>     call print_string
-   592                              <2> 
-   593 00000EFE 8A16[6D0D]          <2>     mov byte dl, [termRamPos]
-   594 00000F02 B600                <2>     mov dh, 0
-   595 00000F04 E8E2F2              <2>     call movecursor
-   596                              <2> 
-   597 00000F07 8B1E[6D0D]          <2>     mov bx, [termRamPos]
-   598                              <2> 
-   599                              <2>     ; mov byte [sector + bx], 0
-   600                              <2> 
-   601 00000F0B C3                  <2>     ret
-   602                              <2> 
-   603                              <2> backspacePdone:
-   604                              <2> 
-   605 00000F0C C3                  <2>     ret
-   606                              <2> 
-   607                              <2> spaceP:
-   608 00000F0D BE[730A]            <2>     mov si, space
-   609 00000F10 E88FF2              <2>     call print_string
-   610                              <2> 
-   611 00000F13 B020                <2>     mov al, " "
-   612                              <2> 
-   613                              <2>     ; jmp done
-   614                              <2> 
-   615                              <2> done:
-   616 00000F15 803E[6D0D]63        <2>     cmp byte [termRamPos], 99
-   617 00000F1A 74F0                <2>     je backspacePdone
-   618                              <2> 
-   619 00000F1C 8B1E[6D0D]          <2>     mov bx, [termRamPos]
-   620 00000F20 8887[090D]          <2>     mov byte [termRam + bx], al
-   621                              <2> 
-   622                              <2>     ; mov byte [sector + bx], al
-   623                              <2> 
-   624 00000F24 FF06[6D0D]          <2>     inc word [termRamPos]
-   625                              <2> 
-   626 00000F28 B200                <2>     mov dl, 0
-   627 00000F2A B600                <2>     mov dh, 0
-   628 00000F2C E8BAF2              <2>     call movecursor
-   629                              <2> 
-   630 00000F2F BE[6F0D]            <2>     mov si, termChar
-   631 00000F32 E86DF2              <2>     call print_string
-   632                              <2> 
-   633 00000F35 BE[090D]            <2>     mov si, termRam
-   634 00000F38 E867F2              <2>     call print_string
-   635                              <2> 
-   636 00000F3B C3                  <2>     ret
-   637                              <2> 
-   638                              <2> runCMD:
-   639 00000F3C 31F6                <2>     xor si, si
-   640                              <2> .loop:
-   641                              <2> 
-   642 00000F3E B9[720D]            <2>     mov cx, commandsListPointers
-   643 00000F41 BA[D60D]            <2>     mov dx, commandsListStringPointers
-   644                              <2> 
-   645 00000F44 01F1                <2>     add cx, si
-   646 00000F46 01F1                <2>     add cx, si
-   647 00000F48 01F2                <2>     add dx, si
-   648 00000F4A 01F2                <2>     add dx, si
-   649                              <2> 
-   650 00000F4C 83FE32              <2>     cmp si, 50
-   651 00000F4F 741E                <2>     je .done
-   652                              <2> 
-   653 00000F51 BD[090D]            <2>     mov bp, termRam
-   654 00000F54 89D3                <2>     mov bx, dx
-   655 00000F56 8B07                <2>     mov ax, [bx]
-   656 00000F58 89C3                <2>     mov bx, ax
-   657 00000F5A 52                  <2>     push dx
-   658 00000F5B 51                  <2>     push cx
-   659 00000F5C 56                  <2>     push si
-   660 00000F5D E871F2              <2>     call compareString
-   661 00000F60 5E                  <2>     pop si
-   662 00000F61 59                  <2>     pop cx
-   663 00000F62 5A                  <2>     pop dx
-   664                              <2>     
-   665 00000F63 80FC01              <2>     cmp ah, 1
-   666 00000F66 7403                <2>     je .execute
-   667                              <2> 
-   668 00000F68 46                  <2>     inc si
-   669                              <2> 
-   670 00000F69 EBD3                <2>     jmp .loop
-   671                              <2> .execute:
-   672 00000F6B 89CB                <2>     mov bx, cx
-   673 00000F6D FF17                <2>     call [bx]
-   674                              <2> .done:
-   675                              <2> 
-   676 00000F6F E87EF2              <2>     call clearscreen
-   677 00000F72 EB00                <2>     jmp donecmd
-   678                              <2> donecmd:
-   679                              <2> 
-   680 00000F74 8B1E[6D0D]          <2>     mov bx, [termRamPos]
-   681 00000F78 C687[090D]00        <2>     mov byte [termRam + bx], 0
-   682 00000F7D C706[6D0D]0000      <2>     mov word [termRamPos], 0
-   683                              <2> 
-   684 00000F83 B80300              <2>     mov  ax, 3    ; BIOS video mode 80x25 16-color text
-   685 00000F86 CD10                <2>     int  10h      ; this also happens to clear the screen.
-   686                              <2> 
-   687 00000F88 31C9                <2>     xor cx, cx
-   688 00000F8A E81AFF              <2>     call escLoop
-   689                              <2> 
-   690 00000F8D 31D2                <2>     xor dx, dx
-   691 00000F8F E857F2              <2>     call movecursor
-   692                              <2> 
-   693 00000F92 BE[6F0D]            <2>     mov si, termChar
-   694 00000F95 E80AF2              <2>     call print_string
-   695                              <2> 
-   696 00000F98 C3                  <2>     ret
-   464                              <1> %include "src/kernel/disk.asm"
-   465                              <2> 
-   466 00000F99 00<rep 200h>        <2> sector: times 512 db 0
-   467                              <2> 
-   468                              <2> ; ch = cyl num, cl = sect num, dh = head num, dl = drive number (BE CAUTIOUS WITH DRIVE ZERO)
-   469                              <2> writeSector:
-   470 00001199 60                  <2>     pusha
-   471 0000119A FC                  <2>     cld
-   472 0000119B B403                <2>     mov ah, 3h
-   473 0000119D B001                <2>     mov al, 1
-   474 0000119F 31DB                <2>     xor bx, bx    
-   475 000011A1 8EC3                <2>     mov es, bx
-   476 000011A3 BB[990F]            <2>     mov bx, sector
-   477 000011A6 CD13                <2>     int 13h 
-   478 000011A8 61                  <2>     popa
-   479 000011A9 C3                  <2>     ret
-   480                              <2> 
-   481                              <2> 
-   482                              <2> readSector:
-   483 000011AA 60                  <2>     pusha
-   484 000011AB FC                  <2>     cld
-   485 000011AC B402                <2>     mov ah, 2h
-   486 000011AE B001                <2>     mov al, 1
-   487 000011B0 31DB                <2>     xor bx, bx    
-   488 000011B2 8EC3                <2>     mov es, bx
-   489 000011B4 BB[990F]            <2>     mov bx, sector
-   490 000011B7 CD13                <2>     int 13h
-   491 000011B9 61                  <2>     popa
-   492 000011BA C3                  <2>     ret
-   465                              <1> %include "src/kernel/fs.asm"
-   466                              <2> ;
-   467                              <2> ;   The PSCS Filesystem is inspired by USTAR and FAT12
-   468                              <2> ;   https://wiki.osdev.org/USTAR   https://wiki.osdev.org/FAT#FAT_12
-   469                              <2> ;   This filesystem is meant to be modified in place however
-   470                              <2> ;
-   471                              <2> 
-   472                              <2> ; filemetadata structure
-   473                              <2> ; 0-2 sector magic word ("df" ascii)
-   474                              <2> ; 3 data cylinder
-   475                              <2> ; 4 data sector
-   476                              <2> ; 5 data head
-   477                              <2> ; 6-100 filename 
-   478                              <2> ; 101 filesize (measured in 512 byte sectors)
-   479                              <2> ; 102-152 owner (username can only be 50 bytes)
-   480                              <2> ; 153-511 reserved
-   481                              <2> 
-   482 000011BB ??                  <2> alstore: resb 1
-   482          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
-   483                              <2> 
-   484                              <2> getAlStore:
-   485 000011BC BD[BB11]            <2>     mov bp, alstore
-   486 000011BF C3                  <2>     ret
-   487                              <2> 
-   488                              <2> ; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive
-   489                              <2> 
-   490                              <2> getFilesize:
-   491 000011C0 E8E7FF              <2>     call readSector
-   492 000011C3 8B2E[FE0F]          <2>     mov bp, [sector + 101]
-   493 000011C7 C3                  <2>     ret
-   494                              <2> 
-   495                              <2> getSectorPointer:
-   496 000011C8 BD[990F]            <2>     mov bp, sector
-   497 000011CB C3                  <2>     ret
-   498                              <2> 
-   499                              <2> ;
-   500                              <2> ; reads a 512 byte block from a file to sector pointer
-   501                              <2> ; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive, al=block number
-   502                              <2> ; out: ax=escape code (1 success, 0 fail)
-   503                              <2> ;
-   504                              <2> readFile:
-   505 000011CC E8DBFF              <2>     call readSector
-   506                              <2> 
-   507 000011CF 813E[990F]6466      <2>     cmp word [sector], "df"
-   508 000011D5 7419                <2>     je .fail
-   509                              <2> 
-   510 000011D7 8B2E[BB11]          <2>     mov bp, [alstore]
-   511 000011DB 012E[9C0F]          <2>     add [sector + 3], bp
-   512 000011DF 8A0E[9C0F]          <2>     mov cl, [sector + 3]
-   513 000011E3 B500                <2>     mov ch, 0
-   514 000011E5 B600                <2>     mov dh, 0
-   515 000011E7 B201                <2>     mov dl, 1
-   516                              <2> 
-   517 000011E9 E8BEFF              <2>     call readSector
-   518                              <2> 
-   519 000011EC B80100              <2>     mov ax, 1
-   520 000011EF C3                  <2>     ret
-   521                              <2> 
-   522                              <2> .fail:
-   523 000011F0 31C0                <2>     xor ax, ax
-   524 000011F2 C3                  <2>     ret
-   525                              <2> 
-   526                              <2> ;
-   527                              <2> ; writes a 512 byte block to a file from the sector pointer
-   528                              <2> ; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive, al=block number
-   529                              <2> ; out: ax=escape code (1 success, 0 fail)
-   530                              <2> ;
-   531                              <2> writeFile:
-   532 000011F3 E8A3FF              <2>     call writeSector
-   533 000011F6 C3                  <2>     ret
-   534                              <2> 
-   535                              <2> retriveFileByName:
-   536 000011F7 C3                  <2>     ret
-   466                              <1> %include "src/bia/text.asm"
-   467                              <2> ;
-   468                              <2> ; Peoples Secure Computing System built-in text editor
-   469                              <2> ; 2022 Lilly
-   470                              <2> ;
-   471                              <2> ; god what have i done
-   472                              <2> 
-   473                              <2> bits 16
-   474                              <2> text:
-   475 000011F8 CD71                <2>     int 71h ; clearscreen interrupt
-   476 000011FA EB00                <2>     jmp loop
-   477                              <2> 
-   478                              <2> loop:
-   479 000011FC B80001              <2>     mov ax, 0100h
-   480 000011FF CD16                <2>     int 16h
-   481 00001201 74F9                <2>     jz loop
-   482                              <2> 
-   483                              <2> .keypressed:
-   484 00001203 31C0                <2>     xor ax, ax
-   485 00001205 CD16                <2>     int 16h
-   486                              <2> 
-   487 00001207 3C1B                <2>     cmp byte al, 1bh
-   488 00001209 0F849500            <2>     je end
-   489                              <2> 
-   490 0000120D 80FC0E              <2>     cmp byte ah, 0eh
-   491 00001210 7442                <2>     je .backspace
-   492                              <2> 
-   493 00001212 8A16[1A13]          <2>     mov dl, [screenposx]
-   494 00001216 8A36[1B13]          <2>     mov dh, [screenposy]
-   495 0000121A E8B700              <2>     call setpos
-   496                              <2> 
-   497 0000121D A2[1613]            <2>     mov [char], al
-   498 00001220 BE[1613]            <2>     mov si, char
-   499 00001223 CD73                <2>     int 73h
-   500                              <2> 
-   501 00001225 803E[1A13]4F        <2>     cmp byte [screenposx], 79
-   502 0000122A 7412                <2>     je .endrow
-   503 0000122C FE06[1A13]          <2>     inc byte [screenposx]
-   504                              <2> .back:
-   505 00001230 8B2E[1813]          <2>     mov bp, [pos]
-   506 00001234 8886[1C13]          <2>     mov byte [textBuffer+bp], al
-   507 00001238 FF06[1813]          <2>     inc word [pos]
-   508 0000123C EBBE                <2>     jmp loop
-   509                              <2> .endrow:
-   510 0000123E C606[1A13]00        <2>     mov byte [screenposx], 0
-   511 00001243 FE06[1B13]          <2>     inc byte [screenposy]
-   512 00001247 EBE7                <2>     jmp .back
-   513                              <2> .endrowup:
-   514 00001249 FE0E[1B13]          <2>     dec byte [screenposy]
-   515 0000124D C606[1A13]4F        <2>     mov byte [screenposx], 79
-   516 00001252 EBDC                <2>     jmp .back
-   517                              <2> .backspace:
-   518 00001254 FF0E[1813]          <2>     dec word [pos]
-   519 00001258 8B2E[1813]          <2>     mov bp, [pos]
-   520 0000125C C686[1C13]00        <2>     mov byte [textBuffer+bp], 0
-   521 00001261 803E[1A13]00        <2>     cmp byte [screenposx], 0 
-   522 00001266 74E1                <2>     je .endrowup
-   523 00001268 FE0E[1A13]          <2>     dec byte [screenposx]
-   524 0000126C B020                <2>     mov al, " "
-   525 0000126E 8A16[1A13]          <2>     mov dl, [screenposx]
-   526 00001272 8A36[1B13]          <2>     mov dh, [screenposy]
-   527 00001276 E86200              <2>     call putCharAt
-   528 00001279 EB81                <2>     jmp loop
-   529                              <2> 
+   526 00000E65 BD[B209]            <2>     mov bp, machineEdit
+   527 00000E68 892E[550D]          <2>     mov [commandsListPointers+8], bp
+   528 00000E6C BD[590A]            <2>     mov bp, machinecmd
+   529 00000E6F 892E[B90D]          <2>     mov [commandsListStringPointers+8], bp
    530                              <2> 
-   531                              <2> prepFileMetaData:
-   532 0000127B C706[1C1B]6466      <2>     mov word [textfilemetadata],     "df" ; data floppy magic word
-   533 00001281 C606[1E1B]00        <2>     mov byte [textfilemetadata+2],    0   ; cyl start of file is located at
-   534 00001286 C606[1F1B]03        <2>     mov byte [textfilemetadata+3],    3   ; sect start of file is located at
-   535 0000128B C606[201B]00        <2>     mov byte [textfilemetadata+4],    0   ; head start of file is located at
-   536 00001290 C706[211B]6869      <2>     mov word [textfilemetadata+5],   "hi" ; filename
-   537 00001296 C606[801B]01        <2>     mov byte [textfilemetadata+100],  1   ; size in 512 byte sectors
-   538 0000129B C706[811B]6D65      <2>     mov word [textfilemetadata+101], "me" ; file owner
-   539 000012A1 C3                  <2>     ret
-   540                              <2> end:
-   541 000012A2 EB00                <2>     jmp saveFile
-   542                              <2> 
-   543                              <2> saveFile:
+   531 00000E73 61                  <2>     popa
+   532 00000E74 C3                  <2>     ret
+   533                              <2> getChar:
+   534                              <2> 
+   535 00000E75 31C0                <2>     xor ax, ax
+   536 00000E77 CD16                <2>     int 0x16
+   537 00000E79 88E0                <2>     mov al, ah
+   538 00000E7B 3C01                <2>     cmp al, 1 ; esc
+   539 00000E7D 752B                <2>     jne notEsc
+   540 00000E7F E86EF3              <2>     call clearscreen
+   541                              <2> 
+   542 00000E82 BA0000              <2>     mov dx, 0
+   543 00000E85 E861F3              <2>     call movecursor
    544                              <2> 
-   545 000012A4 E8D4FF              <2>     call prepFileMetaData
-   546                              <2> 
-   547 000012A7 CD79                <2>     int 79h
-   548 000012A9 BE[1C1B]            <2>     mov si, textfilemetadata
-   549 000012AC 89EF                <2>     mov di, bp
-   550 000012AE B90002              <2>     mov cx, 512
-   551 000012B1 F3A4                <2>     rep movsb
-   552                              <2> 
-   553 000012B3 CD78                <2>     int 78h
-   554 000012B5 B500                <2>     mov ch, 0
-   555 000012B7 B102                <2>     mov cl, 2
-   556 000012B9 B600                <2>     mov dh, 0
-   557 000012BB B201                <2>     mov dl, 1
-   558 000012BD CD77                <2>     int 77h
-   559                              <2> 
-   560 000012BF FC                  <2>     cld
-   561                              <2> 
-   562 000012C0 B403                <2>     mov ah, 3h         ; int13h function 3
-   563 000012C2 B004                <2>     mov al, 4          ; we want to write 1 sectors
-   564 000012C4 B500                <2>     mov ch, 0          ; from cylinder number 0
-   565 000012C6 B103                <2>     mov cl, 3          ; the sector number (starts from 1, not 0)
-   566 000012C8 B600                <2>     mov dh, 0          ; head number 0
-   567 000012CA BB[1C13]            <2>     mov bx, textBuffer ; data to actually write
-   568 000012CD B201                <2>     mov dl, 1          ; drive number
-   569 000012CF CD13                <2>     int 13h 
-   570                              <2> 
-   571                              <2> .end:
-   572 000012D1 CD70                <2>     int 70h
-   573                              <2> 
-   574                              <2> readFileToBuffer:
-   575                              <2> 
-   576 000012D3 C3                  <2>     ret
-   577                              <2> ;dh for row, dl for column
-   578                              <2> setpos:
-   579 000012D4 B700                <2>     mov bh, 0
-   580 000012D6 B402                <2>     mov ah, 02h
-   581 000012D8 CD10                <2>     int 10h
-   582                              <2> 
-   583 000012DA C3                  <2>     ret
-   584                              <2> 
-   585                              <2> ;dh for row, dl for column, al for char
-   586                              <2> putCharAt:
-   587                              <2> 
-   588 000012DB E8F6FF              <2>     call setpos
-   589                              <2> 
-   590 000012DE 30E4                <2>     xor ah, ah
-   591                              <2> 
-   592 000012E0 B40E                <2>     mov ah, 0Eh
-   593 000012E2 BB0700              <2> 	mov bx, 0007h	; gray colour, black background
-   594 000012E5 CD10                <2>     int 10h
-   595                              <2> 
-   596 000012E7 C3                  <2>     ret
+   545 00000E88 C706[480D]0000      <2>     mov word [termRamPos], 0
+   546 00000E8E 31C9                <2>     xor cx, cx
+   547                              <2> 
+   548                              <2> escLoop:
+   549                              <2> 
+   550                              <2> 
+   551 00000E90 890E[480D]          <2>     mov [termRamPos], cx
+   552 00000E94 8B1E[480D]          <2>     mov bx, [termRamPos]
+   553 00000E98 C687[E40C]00        <2>     mov byte [termRam + bx], 0
+   554                              <2> 
+   555 00000E9D 41                  <2>     inc cx
+   556 00000E9E 83F963              <2>     cmp cx, 99
+   557 00000EA1 75ED                <2>     jne escLoop
+   558                              <2> 
+   559 00000EA3 C706[480D]0000      <2>     mov word [termRamPos], 0
+   560                              <2> 
+   561 00000EA9 C3                  <2>     ret
+   562                              <2> notEsc:
+   563                              <2> 
+   564 00000EAA 3C1C                <2>     cmp al, 0x1c
+   565 00000EAC 7477                <2>     je runCMD
+   566 00000EAE 3C39                <2>     cmp al, 0x39
+   567 00000EB0 7444                <2>     je spaceP
+   568 00000EB2 3C0E                <2>     cmp al, 0x0e
+   569 00000EB4 740E                <2>     je backspaceP
+   570 00000EB6 3C35                <2>     cmp al, 0x35 ; highest scan code
+   571 00000EB8 7744                <2>     ja done
+   572 00000EBA 2C10                <2>     sub al, 0x10 ; lowest scan code
+   573 00000EBC 7240                <2>     jb done
+   574 00000EBE BB[1E0A]            <2>     mov bx, qwetry
+   575 00000EC1 D7                  <2>     xlat
+   576                              <2>     ; mov [charInp], al
+   577                              <2>     ; mov si, charInp
+   578                              <2>     ; call print_string
+   579                              <2> 
+   580 00000EC2 EB3A                <2>     jmp done
+   581                              <2> 
+   582                              <2> backspaceP:
+   583                              <2> 
+   584 00000EC4 833E[480D]00        <2>     cmp word [termRamPos], 0
+   585 00000EC9 742A                <2>     je backspacePdone
+   586                              <2> 
+   587 00000ECB FF0E[480D]          <2>     dec word [termRamPos]
+   588 00000ECF 8B1E[480D]          <2>     mov bx, [termRamPos]
+   589 00000ED3 C687[E40C]00        <2>     mov byte [termRam + bx], 0
+   590                              <2> 
+   591 00000ED8 8A16[480D]          <2>     mov byte dl, [termRamPos]
+   592 00000EDC B600                <2>     mov dh, 0
+   593 00000EDE E808F3              <2>     call movecursor
+   594                              <2> 
+   595 00000EE1 BE[460A]            <2>     mov si, space
+   596 00000EE4 E8BBF2              <2>     call print_string
    597                              <2> 
-   598 000012E8 6661696C656400      <2> fail: db "failed", 0
-   599 000012EF 65786974696E672054- <2> exiting: db "exiting Text editor", 0xa, 0xd, 0
-   599 000012F8 65787420656469746F- <2>
-   599 00001301 720A0D00            <2>
-   600 00001305 656E7465722046696C- <2> filename: db "enter Filename: ", 0
-   600 0000130E 656E616D653A2000    <2>
-   601 00001316 ????                <2> char: resb 2
-   601          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
-   602 00001318 0000                <2> pos: dw 0
-   603 0000131A 00                  <2> screenposx: db 0
-   604 0000131B 00                  <2> screenposy: db 0
-   605 0000131C <res 800h>          <2> textBuffer: resb 2048 ; 80x25 chars plus 48 extra bytes to make it nice and neat (aligned by 512 byte)
-   605          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
-   606 00001B1C <res 200h>          <2> textfilemetadata: resb 512
-   606          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
-   467                              <1> 
-   468 00001D1C 00<rep 1662E4h>     <1> times 1474560 - ($ - $$)  db 0 ; pad to the exact ammount of bytes on a "1.44 mb" floppy disk (double 720k)
-   469                              <1>                                ; https://www.quora.com/If-the-capacity-of-a-floppy-disk-is-1-44-MB-what-is-its-exact-capacity-in-bits/answer/Joe-Zbiciak?ch=10&oid=110788345&share=1ea5be2d&srid=unZYpZ&target_type=answer
+   598 00000EE7 8A16[480D]          <2>     mov byte dl, [termRamPos]
+   599 00000EEB B600                <2>     mov dh, 0
+   600 00000EED E8F9F2              <2>     call movecursor
+   601                              <2> 
+   602 00000EF0 8B1E[480D]          <2>     mov bx, [termRamPos]
+   603                              <2> 
+   604                              <2>     ; mov byte [sector + bx], 0
+   605                              <2> 
+   606 00000EF4 C3                  <2>     ret
+   607                              <2> 
+   608                              <2> backspacePdone:
+   609                              <2> 
+   610 00000EF5 C3                  <2>     ret
+   611                              <2> 
+   612                              <2> spaceP:
+   613 00000EF6 BE[460A]            <2>     mov si, space
+   614 00000EF9 E8A6F2              <2>     call print_string
+   615                              <2> 
+   616 00000EFC B020                <2>     mov al, " "
+   617                              <2> 
+   618                              <2>     ; jmp done
+   619                              <2> 
+   620                              <2> done:
+   621 00000EFE 803E[480D]63        <2>     cmp byte [termRamPos], 99
+   622 00000F03 74F0                <2>     je backspacePdone
+   623                              <2> 
+   624 00000F05 8B1E[480D]          <2>     mov bx, [termRamPos]
+   625 00000F09 8887[E40C]          <2>     mov byte [termRam + bx], al
+   626                              <2> 
+   627                              <2>     ; mov byte [sector + bx], al
+   628                              <2> 
+   629 00000F0D FF06[480D]          <2>     inc word [termRamPos]
+   630                              <2> 
+   631 00000F11 B200                <2>     mov dl, 0
+   632 00000F13 B600                <2>     mov dh, 0
+   633 00000F15 E8D1F2              <2>     call movecursor
+   634                              <2> 
+   635 00000F18 BE[4A0D]            <2>     mov si, termChar
+   636 00000F1B E884F2              <2>     call print_string
+   637                              <2> 
+   638 00000F1E BE[E40C]            <2>     mov si, termRam
+   639 00000F21 E87EF2              <2>     call print_string
+   640                              <2> 
+   641 00000F24 C3                  <2>     ret
+   642                              <2> 
+   643                              <2> runCMD:
+   644 00000F25 31F6                <2>     xor si, si
+   645                              <2> .loop:
+   646                              <2> 
+   647 00000F27 B9[4D0D]            <2>     mov cx, commandsListPointers
+   648 00000F2A BA[B10D]            <2>     mov dx, commandsListStringPointers
+   649                              <2> 
+   650 00000F2D 01F1                <2>     add cx, si
+   651 00000F2F 01F1                <2>     add cx, si
+   652 00000F31 01F2                <2>     add dx, si
+   653 00000F33 01F2                <2>     add dx, si
+   654                              <2> 
+   655 00000F35 83FE32              <2>     cmp si, 50
+   656 00000F38 741E                <2>     je .done
+   657                              <2> 
+   658 00000F3A BD[E40C]            <2>     mov bp, termRam
+   659 00000F3D 89D3                <2>     mov bx, dx
+   660 00000F3F 8B07                <2>     mov ax, [bx]
+   661 00000F41 89C3                <2>     mov bx, ax
+   662 00000F43 52                  <2>     push dx
+   663 00000F44 51                  <2>     push cx
+   664 00000F45 56                  <2>     push si
+   665 00000F46 E888F2              <2>     call compareString
+   666 00000F49 5E                  <2>     pop si
+   667 00000F4A 59                  <2>     pop cx
+   668 00000F4B 5A                  <2>     pop dx
+   669                              <2>     
+   670 00000F4C 80FC01              <2>     cmp ah, 1
+   671 00000F4F 7403                <2>     je .execute
+   672                              <2> 
+   673 00000F51 46                  <2>     inc si
+   674                              <2> 
+   675 00000F52 EBD3                <2>     jmp .loop
+   676                              <2> .execute:
+   677 00000F54 89CB                <2>     mov bx, cx
+   678 00000F56 FF17                <2>     call [bx]
+   679                              <2> .done:
+   680                              <2> 
+   681 00000F58 E895F2              <2>     call clearscreen
+   682 00000F5B EB00                <2>     jmp donecmd
+   683                              <2> donecmd:
+   684                              <2> 
+   685 00000F5D 8B1E[480D]          <2>     mov bx, [termRamPos]
+   686 00000F61 C687[E40C]00        <2>     mov byte [termRam + bx], 0
+   687 00000F66 C706[480D]0000      <2>     mov word [termRamPos], 0
+   688                              <2> 
+   689 00000F6C B80300              <2>     mov  ax, 3    ; BIOS video mode 80x25 16-color text
+   690 00000F6F CD10                <2>     int  10h      ; this also happens to clear the screen.
+   691                              <2> 
+   692 00000F71 31C9                <2>     xor cx, cx
+   693 00000F73 E81AFF              <2>     call escLoop
+   694                              <2> 
+   695 00000F76 31D2                <2>     xor dx, dx
+   696 00000F78 E86EF2              <2>     call movecursor
+   697                              <2> 
+   698 00000F7B BE[4A0D]            <2>     mov si, termChar
+   699 00000F7E E821F2              <2>     call print_string
+   700                              <2> 
+   701 00000F81 C3                  <2>     ret
+   462                              <1> %include "src/kernel/disk.asm"
+   463                              <2> 
+   464 00000F82 00<rep 200h>        <2> sector: times 512 db 0
+   465                              <2> 
+   466                              <2> ; ch = cyl num, cl = sect num, dh = head num, dl = drive number (BE CAUTIOUS WITH DRIVE ZERO)
+   467                              <2> writeSector:
+   468 00001182 60                  <2>     pusha
+   469 00001183 FC                  <2>     cld
+   470 00001184 B403                <2>     mov ah, 3h
+   471 00001186 B001                <2>     mov al, 1
+   472 00001188 31DB                <2>     xor bx, bx    
+   473 0000118A 8EC3                <2>     mov es, bx
+   474 0000118C BB[820F]            <2>     mov bx, sector
+   475 0000118F CD13                <2>     int 13h 
+   476 00001191 61                  <2>     popa
+   477 00001192 C3                  <2>     ret
+   478                              <2> 
+   479                              <2> 
+   480                              <2> readSector:
+   481 00001193 60                  <2>     pusha
+   482 00001194 FC                  <2>     cld
+   483 00001195 B402                <2>     mov ah, 2h
+   484 00001197 B001                <2>     mov al, 1
+   485 00001199 31DB                <2>     xor bx, bx    
+   486 0000119B 8EC3                <2>     mov es, bx
+   487 0000119D BB[820F]            <2>     mov bx, sector
+   488 000011A0 CD13                <2>     int 13h
+   489 000011A2 61                  <2>     popa
+   490 000011A3 C3                  <2>     ret
+   463                              <1> %include "src/kernel/fs.asm"
+   464                              <2> ;
+   465                              <2> ;   The PSCS Filesystem is inspired by USTAR and FAT12
+   466                              <2> ;   https://wiki.osdev.org/USTAR   https://wiki.osdev.org/FAT#FAT_12
+   467                              <2> ;   This filesystem is meant to be modified in place however
+   468                              <2> ;
+   469                              <2> 
+   470                              <2> ; filemetadata structure
+   471                              <2> ; 0-2 sector magic word ("df" ascii)
+   472                              <2> ; 3 data cylinder
+   473                              <2> ; 4 data sector
+   474                              <2> ; 5 data head
+   475                              <2> ; 6-100 filename 
+   476                              <2> ; 101 filesize (measured in 512 byte sectors)
+   477                              <2> ; 102-152 owner (username can only be 50 bytes)
+   478                              <2> ; 153-511 reserved
+   479                              <2> 
+   480 000011A4 ??                  <2> alstore: resb 1
+   480          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
+   481                              <2> 
+   482                              <2> getAlStore:
+   483 000011A5 BD[A411]            <2>     mov bp, alstore
+   484 000011A8 C3                  <2>     ret
+   485                              <2> 
+   486                              <2> ; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive
+   487                              <2> 
+   488                              <2> getFilesize:
+   489 000011A9 E8E7FF              <2>     call readSector
+   490 000011AC 8B2E[E70F]          <2>     mov bp, [sector + 101]
+   491 000011B0 C3                  <2>     ret
+   492                              <2> 
+   493                              <2> getSectorPointer:
+   494 000011B1 BD[820F]            <2>     mov bp, sector
+   495 000011B4 C3                  <2>     ret
+   496                              <2> 
+   497                              <2> ;
+   498                              <2> ; reads a 512 byte block from a file to sector pointer
+   499                              <2> ; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive, al=block number
+   500                              <2> ; out: ax=escape code (1 success, 0 fail)
+   501                              <2> ;
+   502                              <2> readFile:
+   503 000011B5 E8DBFF              <2>     call readSector
+   504                              <2> 
+   505 000011B8 813E[820F]6466      <2>     cmp word [sector], "df"
+   506 000011BE 7419                <2>     je .fail
+   507                              <2> 
+   508 000011C0 8B2E[A411]          <2>     mov bp, [alstore]
+   509 000011C4 012E[850F]          <2>     add [sector + 3], bp
+   510 000011C8 8A0E[850F]          <2>     mov cl, [sector + 3]
+   511 000011CC B500                <2>     mov ch, 0
+   512 000011CE B600                <2>     mov dh, 0
+   513 000011D0 B201                <2>     mov dl, 1
+   514                              <2> 
+   515 000011D2 E8BEFF              <2>     call readSector
+   516                              <2> 
+   517 000011D5 B80100              <2>     mov ax, 1
+   518 000011D8 C3                  <2>     ret
+   519                              <2> 
+   520                              <2> .fail:
+   521 000011D9 31C0                <2>     xor ax, ax
+   522 000011DB C3                  <2>     ret
+   523                              <2> 
+   524                              <2> ;
+   525                              <2> ; writes a 512 byte block to a file from the sector pointer
+   526                              <2> ; in: ch=metadata cylinder, cl=sector, dh=head, dl=drive, al=block number
+   527                              <2> ; out: ax=escape code (1 success, 0 fail)
+   528                              <2> ;
+   529                              <2> writeFile:
+   530 000011DC E8A3FF              <2>     call writeSector
+   531 000011DF C3                  <2>     ret
+   532                              <2> 
+   533                              <2> retriveFileByName:
+   534 000011E0 C3                  <2>     ret
+   464                              <1> %include "src/bia/text.asm"
+   465                              <2> ;
+   466                              <2> ; Peoples Secure Computing System built-in text editor
+   467                              <2> ; 2022 Lilly
+   468                              <2> ;
+   469                              <2> ; god what have i done
+   470                              <2> 
+   471                              <2> bits 16
+   472                              <2> text:
+   473 000011E1 CD71                <2>     int 71h ; clearscreen interrupt
+   474 000011E3 EB00                <2>     jmp loop
+   475                              <2> 
+   476                              <2> loop:
+   477 000011E5 B80001              <2>     mov ax, 0100h
+   478 000011E8 CD16                <2>     int 16h
+   479 000011EA 74F9                <2>     jz loop
+   480                              <2> 
+   481                              <2> .keypressed:
+   482 000011EC 31C0                <2>     xor ax, ax
+   483 000011EE CD16                <2>     int 16h
+   484                              <2> 
+   485 000011F0 3C1B                <2>     cmp byte al, 1bh
+   486 000011F2 0F849500            <2>     je end
+   487                              <2> 
+   488 000011F6 80FC0E              <2>     cmp byte ah, 0eh
+   489 000011F9 7442                <2>     je .backspace
+   490                              <2> 
+   491 000011FB 8A16[0313]          <2>     mov dl, [screenposx]
+   492 000011FF 8A36[0413]          <2>     mov dh, [screenposy]
+   493 00001203 E8B700              <2>     call setpos
+   494                              <2> 
+   495 00001206 A2[FF12]            <2>     mov [char], al
+   496 00001209 BE[FF12]            <2>     mov si, char
+   497 0000120C CD73                <2>     int 73h
+   498                              <2> 
+   499 0000120E 803E[0313]4F        <2>     cmp byte [screenposx], 79
+   500 00001213 7412                <2>     je .endrow
+   501 00001215 FE06[0313]          <2>     inc byte [screenposx]
+   502                              <2> .back:
+   503 00001219 8B2E[0113]          <2>     mov bp, [pos]
+   504 0000121D 8886[0513]          <2>     mov byte [textBuffer+bp], al
+   505 00001221 FF06[0113]          <2>     inc word [pos]
+   506 00001225 EBBE                <2>     jmp loop
+   507                              <2> .endrow:
+   508 00001227 C606[0313]00        <2>     mov byte [screenposx], 0
+   509 0000122C FE06[0413]          <2>     inc byte [screenposy]
+   510 00001230 EBE7                <2>     jmp .back
+   511                              <2> .endrowup:
+   512 00001232 FE0E[0413]          <2>     dec byte [screenposy]
+   513 00001236 C606[0313]4F        <2>     mov byte [screenposx], 79
+   514 0000123B EBDC                <2>     jmp .back
+   515                              <2> .backspace:
+   516 0000123D FF0E[0113]          <2>     dec word [pos]
+   517 00001241 8B2E[0113]          <2>     mov bp, [pos]
+   518 00001245 C686[0513]00        <2>     mov byte [textBuffer+bp], 0
+   519 0000124A 803E[0313]00        <2>     cmp byte [screenposx], 0 
+   520 0000124F 74E1                <2>     je .endrowup
+   521 00001251 FE0E[0313]          <2>     dec byte [screenposx]
+   522 00001255 B020                <2>     mov al, " "
+   523 00001257 8A16[0313]          <2>     mov dl, [screenposx]
+   524 0000125B 8A36[0413]          <2>     mov dh, [screenposy]
+   525 0000125F E86200              <2>     call putCharAt
+   526 00001262 EB81                <2>     jmp loop
+   527                              <2> 
+   528                              <2> 
+   529                              <2> prepFileMetaData:
+   530 00001264 C706[051B]6466      <2>     mov word [textfilemetadata],     "df" ; data floppy magic word
+   531 0000126A C606[071B]00        <2>     mov byte [textfilemetadata+2],    0   ; cyl start of file is located at
+   532 0000126F C606[081B]03        <2>     mov byte [textfilemetadata+3],    3   ; sect start of file is located at
+   533 00001274 C606[091B]00        <2>     mov byte [textfilemetadata+4],    0   ; head start of file is located at
+   534 00001279 C706[0A1B]6869      <2>     mov word [textfilemetadata+5],   "hi" ; filename
+   535 0000127F C606[691B]01        <2>     mov byte [textfilemetadata+100],  1   ; size in 512 byte sectors
+   536 00001284 C706[6A1B]6D65      <2>     mov word [textfilemetadata+101], "me" ; file owner
+   537 0000128A C3                  <2>     ret
+   538                              <2> end:
+   539 0000128B EB00                <2>     jmp saveFile
+   540                              <2> 
+   541                              <2> saveFile:
+   542                              <2> 
+   543 0000128D E8D4FF              <2>     call prepFileMetaData
+   544                              <2> 
+   545 00001290 CD79                <2>     int 79h
+   546 00001292 BE[051B]            <2>     mov si, textfilemetadata
+   547 00001295 89EF                <2>     mov di, bp
+   548 00001297 B90002              <2>     mov cx, 512
+   549 0000129A F3A4                <2>     rep movsb
+   550                              <2> 
+   551 0000129C CD78                <2>     int 78h
+   552 0000129E B500                <2>     mov ch, 0
+   553 000012A0 B102                <2>     mov cl, 2
+   554 000012A2 B600                <2>     mov dh, 0
+   555 000012A4 B201                <2>     mov dl, 1
+   556 000012A6 CD77                <2>     int 77h
+   557                              <2> 
+   558 000012A8 FC                  <2>     cld
+   559                              <2> 
+   560 000012A9 B403                <2>     mov ah, 3h         ; int13h function 3
+   561 000012AB B004                <2>     mov al, 4          ; we want to write 1 sectors
+   562 000012AD B500                <2>     mov ch, 0          ; from cylinder number 0
+   563 000012AF B103                <2>     mov cl, 3          ; the sector number (starts from 1, not 0)
+   564 000012B1 B600                <2>     mov dh, 0          ; head number 0
+   565 000012B3 BB[0513]            <2>     mov bx, textBuffer ; data to actually write
+   566 000012B6 B201                <2>     mov dl, 1          ; drive number
+   567 000012B8 CD13                <2>     int 13h 
+   568                              <2> 
+   569                              <2> .end:
+   570 000012BA CD70                <2>     int 70h
+   571                              <2> 
+   572                              <2> readFileToBuffer:
+   573                              <2> 
+   574 000012BC C3                  <2>     ret
+   575                              <2> ;dh for row, dl for column
+   576                              <2> setpos:
+   577 000012BD B700                <2>     mov bh, 0
+   578 000012BF B402                <2>     mov ah, 02h
+   579 000012C1 CD10                <2>     int 10h
+   580                              <2> 
+   581 000012C3 C3                  <2>     ret
+   582                              <2> 
+   583                              <2> ;dh for row, dl for column, al for char
+   584                              <2> putCharAt:
+   585                              <2> 
+   586 000012C4 E8F6FF              <2>     call setpos
+   587                              <2> 
+   588 000012C7 30E4                <2>     xor ah, ah
+   589                              <2> 
+   590 000012C9 B40E                <2>     mov ah, 0Eh
+   591 000012CB BB0700              <2> 	mov bx, 0007h	; gray colour, black background
+   592 000012CE CD10                <2>     int 10h
+   593                              <2> 
+   594 000012D0 C3                  <2>     ret
+   595                              <2> 
+   596 000012D1 6661696C656400      <2> fail: db "failed", 0
+   597 000012D8 65786974696E672054- <2> exiting: db "exiting Text editor", 0xa, 0xd, 0
+   597 000012E1 65787420656469746F- <2>
+   597 000012EA 720A0D00            <2>
+   598 000012EE 656E7465722046696C- <2> filename: db "enter Filename: ", 0
+   598 000012F7 656E616D653A2000    <2>
+   599 000012FF ????                <2> char: resb 2
+   599          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
+   600 00001301 0000                <2> pos: dw 0
+   601 00001303 00                  <2> screenposx: db 0
+   602 00001304 00                  <2> screenposy: db 0
+   603 00001305 <res 800h>          <2> textBuffer: resb 2048 ; 80x25 chars plus 48 extra bytes to make it nice and neat (aligned by 512 byte)
+   603          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
+   604 00001B05 <res 200h>          <2> textfilemetadata: resb 512
+   604          ******************  <2>  warning: uninitialized space declared in .text section: zeroing [-w+zeroing]
+   465                              <1> 
+   466 00001D05 00<rep 1662FBh>     <1> times 1474560 - ($ - $$)  db 0 ; pad to the exact ammount of bytes on a "1.44 mb" floppy disk (double 720k)
+   467                              <1>                                ; https://www.quora.com/If-the-capacity-of-a-floppy-disk-is-1-44-MB-what-is-its-exact-capacity-in-bits/answer/Joe-Zbiciak?ch=10&oid=110788345&share=1ea5be2d&srid=unZYpZ&target_type=answer

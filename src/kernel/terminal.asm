@@ -5,8 +5,10 @@ space db " ", 0x0
 haltcmd db "HALT", 0x0
 textcmd db "TEXT", 0x0
 rebootcmd db "REBOOT", 0x0
+machinecmd db "MACHINE", 0x0
 
-commie db "                                        ", 0xa, 0xd
+commie:
+ db "                     ,.                 ", 0xa, 0xd
 db "                       *@@@/             ", 0xa, 0xd
 db "                          ,@@@@          ", 0xa, 0xd
 db "          @@@@@@@@@          @@@@@       ", 0xa, 0xd
@@ -59,6 +61,11 @@ setupInitalCommands:
     mov [commandsListPointers+6], bp
     mov bp, commiecmd
     mov [commandsListStringPointers+6], bp
+
+    mov bp, machineEdit
+    mov [commandsListPointers+8], bp
+    mov bp, machinecmd
+    mov [commandsListStringPointers+8], bp
 
     popa
     ret

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+    <head>
+        <title>
+            HEX-PSCS encoding
+        </title>
+    </head>
+    <body>
+        <textarea id="hexinput">
+            input hex here
+        </textarea>
+        <p id="pscsout">
+            PSCS comes out here
+        </p>
+        <button onclick="convert();">
+            Convert!
+        </button>
+
+        <script defer>
+            let hexinput = document.getElementById("hexinput");
+            let pscsoutputelem = document.getElementById("pscsout");
+            let hexstring = "";
+            let pscsoutput = "";
+
+            function convert(){
+                let hexstring = "";
+                let pscsoutput = "";
+                hexstring = hexinput.value.toLowerCase();
+                for(let i = 0; i < hexstring.length; i++) {
+                    if (hexstring[i] == "0") pscsoutput += "a";
+                    if (hexstring[i] == "1") pscsoutput += "b";
+                    if (hexstring[i] == "2") pscsoutput += "c";
+                    if (hexstring[i] == "3") pscsoutput+= "d";
+                    if (hexstring[i] == "4") pscsoutput+= "e";
+                    if (hexstring[i] == "5") pscsoutput+= "f";
+                    if (hexstring[i] == "6") pscsoutput+= "g";
+                    if (hexstring[i] == "7") pscsoutput+= "h";
+                    if (hexstring[i] == "8") pscsoutput += "i";
+                    if (hexstring[i] == "9") pscsoutput += "j";
+                    if (hexstring[i] == "a") pscsoutput += "k";
+                    if (hexstring[i] == "b") pscsoutput += "l";
+                    if (hexstring[i] == "c") pscsoutput += "m";
+                    if (hexstring[i] == "d") pscsoutput += "n";
+                    if (hexstring[i] == "e") pscsoutput += "o";
+                    if (hexstring[i] == "f") pscsoutput += "p";
+                }
+                pscsoutputelem.innerText = pscsoutput
+            }
+        </script>
+
+    </body>
+</html>
