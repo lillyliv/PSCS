@@ -7,6 +7,7 @@ bits 16
 
 INTERRUPT_VECTOR_TABLE equ 0000h
 testt: db "testt", 0xa, 0xd, 0x0
+aa: db "aaaaa", 0xa, 0xd, 0x0
 kernel:
 
     mov si, loadedString
@@ -87,43 +88,25 @@ kernel:
     mov bx, mallocHimem
     call setInterrupt
 
+    mov al, 81h
+    mov bx, serialLogByte
+    call setInterrupt
+
     call clearscreen
 
     call setupInitalCommands
-
-    ; call init_serial
     
     mov si, termChar
     call print_string
+
+
+    call init_serial
+
 kernel_loop:
 
-    call getChar
+  call getChar
 
-    jmp kernel_loop
-
-
-; nosound: ; Silences the speaker. (broken?)
-;     in al,0x61
-;     and al,0xFC;
-;     out 0x61,al
-;     ret
-
-; sound: ; AX = frequency Starts the speaker emiting a sound of a given frequency
-;     mov bx,ax ; RETURNS:  AX,BX,DX = undefined
-;     mov dx,0x12;
-;     mov ax,0x34DC
-;     div bx
-;     mov bl,al
-;     mov al,0xB6;
-;     out 0x43,al
-;     mov al,bl
-;     out 0x42,al
-;     mov al,ah
-;     out 0x42,al
-;     in al,0x61
-;     or al,3
-;     out 0x61,al
-;     ret
+  jmp kernel_loop
 
 
 ; Prints the value of DX as hex.
@@ -224,6 +207,7 @@ reboot:
     ; https://wiki.osdev.org/Reboot#Far_jump_to_the_reset_vector.2FTriple_fault
     jmp 0xFFFF:0
 %include "src/kernel/memory.asm"
+%include "src/kernel/speaker.asm"
 %include "src/kernel/serial.asm"
 %include "src/bia/machine.asm"
 %include "src/kernel/ata.asm"
