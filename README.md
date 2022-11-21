@@ -1,5 +1,5 @@
 # PSCS
-Peoples Secure Computing System is a free operating system for the people, by the people for x86 Intel/AMD compatible systems. It runs in 16 bit real mode (80386 and higher required for 4GB memory, however). PSCS boots from floppy or bios emulated floppy (happens automatically) and supports vga text and graphics.
+Peoples Secure Computing System is a free operating system for the people, by the people for x86 Intel/AMD compatible systems. It runs in 16 bit real mode (80386 and higher required for 4GB memory, however), 80286 required for everything else. PSCS boots from floppy or bios emulated floppy (happens automatically) and supports vga text and graphics.
 
 ## Build Dependencies
 
